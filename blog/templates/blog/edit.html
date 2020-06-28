@@ -1,0 +1,7 @@
+{{ message }}
+<form action="{% url 'blog:edit' article_name %}" method="post">
+    {% csrf_token %}
+    {{ form.name }}<br>
+    {{ form.text }}<br>
+    <input type="submit" value="submit">
+</form>

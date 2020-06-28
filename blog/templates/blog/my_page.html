@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog BN</title>
+    <meta name="google" content="notranslate" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/my_page.css' %}">
+</head>
+<body>
+
+    <svg style="display: none;">
+        <symbol id="search" viewBox="0 0 24 24">
+            <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
+            </g>
+        </symbol>
+    </svg>
+
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+
+            <div class="header__logo">
+                    <a class="header__logotype" href="">Blog BN</a>
+            </div>
+
+            <nav class="nav">
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                <a class="nav__link--sign" href="{% url 'blog:logout' %}">Logout</a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div class="fixword">
+    <div class="fixword__text">
+        Blog from BN
+    </div>
+</div>
+
+<div class="intro">
+    <div class="container">
+        <div class="intro__inner">
+            <div class="intro__left">
+
+                <button class="intro__btn2" id="photobtn" type="button">
+                    {% if writer.image %}
+                        <img src="{{ writer.image.url }}" alt="" class="intro__img">
+                    {% else %}
+                        <img src="https://placehold.it/250x250" alt="" class="intro__img">
+                    {% endif %}
+                </button>
+
+                <!-- image -->
+                <form class="boxx" id="boxx" action="{% url 'blog:my_page' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input id="inpu" type=hidden name=MAX_FILE_SIZE value=64000>
+                    {{ image_form.image }}
+                    <iframe id="hf" name="hiddenframe" style="width:0px; height:0px; border:0px"></iframe>
+                    <input id="ib" type="submit" name="image_form">
+                </form>
+            </div>
+
+            <div class="intro__right">
+                <div class="intro__name">{{ writer.name }}</div>
+                <div class="intro__age" id="age">Age: {{ writer.age }}</div>
+                <button type="button" class="intro__btn" id="btn">
+                    {{ writer.bio }}<span class="copy__text">(edit)</span>
+                </button>
+
+                <!-- bio -->
+                <form class="box" action="{% url 'blog:my_page' %}" method="post">
+                    {% csrf_token %}
+                    {{ bio_form.age }}
+                    {{ bio_form.bio }}
+                    <input id="ibtn" type="submit" name="bio_form">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="writer">
+    <div class="container">
+        <div class="writer__inner">
+            <div class="writer__title">Write article</div>
+            {% if message %}
+                {{ message }}<br>
+            {% endif %}
+            <button class=" wbtn" id="writer-btn">Write</button>
+
+            <!-- add form -->
+
+            <form  class="boxl" action="{% url 'blog:my_page' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input id="inp" type=hidden>
+                {{ add_form.image }}
+                <iframe id="hiddenframe" name="hiddenframe" style="width:0px; height:0px; border:0px"></iframe>
+                {{ add_form.name }}
+                {{ add_form.text }}
+                <div class="tags" id="tags">
+                    <p>
+                        {% for t in add_form.tag %}
+                            {{ t }}
+                        {% endfor %}
+                    </p>
+                </div>
+                <input id="btn_btn" type="submit" name="add_form">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="blogs">
+    <div class="container">
+        <div class="blog">
+            <div class="blogs__title">My articles</div>
+            <div class="blogs__list">
+
+                {% for article, type in articles.items %}
+
+                    {% if type == 0 %}
+                        <div class="blogs__item1 bi1">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' writer.name article.name %}">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' writer.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by</span> <a class="blogs__author" href="{% url 'blog:my_page' %}">{{ writer.name }}</a><span class="blogs__s"> on {{ article.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
+
+                    {% if type == 1 %}
+                        <div class="blogs__item2 bi2">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' writer.name article.name %}">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' writer.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by</span> <a class="blogs__author" href="{% url 'blog:my_page' %}">{{ writer.name }}</a><span class="blogs__s"> on {{ article.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
+
+                    {% if type == 2 %}
+                        <div class="blogs__item2 bi3">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' writer.name article.name %}">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' writer.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by</span> <a class="blogs__author" href="{% url 'blog:my_page' %}">{{ writer.name }}</a><span class="blogs__s"> on {{ article.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
+
+                    {% if type == 3 %}
+                        <div class="blogs__item1 bi4">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' writer.name article.name %}">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' writer.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by</span> <a class="blogs__author" href="{% url 'blog:my_page' %}">{{ writer.name }}</a><span class="blogs__s"> on {{ article.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
+                {% empty %}
+                    <h5>No artcles</h5>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__footer">
+            <div class="footer__col">
+                <div class="footer__logo">
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+            </div>
+            <div class="footer__col">
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="copy__text">
+                ©  2020 B&K. All Rights Reserved
+            </div>
+            <div class="copyright__author">
+                <span class="copy__text">Made by</span>  Bogdankov Nikita <span class="copy__text"> and </span> Grigory Novikov
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!--JavaScript-->
+<script src="{% static 'blog/js/app.js' %}"></script>
+
+
+</body>
+</html>

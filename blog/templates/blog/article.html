@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog BN</title>
+    <meta name="google" content="notranslate">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/article.css' %}">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+
+                <div class="header__logo">
+                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+
+                <nav class="nav">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                    {% if requst.user.is_authenticated %}
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                    {% else %}
+                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="intro">
+        <div class="intro__inner">
+            <div class="container2">
+                <div class="intro__btn">
+                    <a href="{% url 'blog:tag' article.tag.name %}" class="intro__btn--text">article.tag.name</a>
+                </div>
+                <div class="intro__title">{{ article.name }}</div>
+                <div class="intro__subtitle">
+                    <div class="intro__author">
+                        <span class="intro__s" >by</span>
+                        <a class="intro__auth" href="{% url 'blog:writer' article.author %}">{{ article.author }}</a>
+                        <span class="intro__s" >
+                            {{ article.pub_date }}
+                            {% if article.pub_date != article.last_edit %}
+                                (Edited {{ article.last_edit }})
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixword">
+        <div class="fixword__text">
+            Blog from BN
+        </div>
+    </div>
+
+    <div class="text">
+        <div class="container">
+            <div class="text__content">
+                <div class="container2">
+                    {{ article.text }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="author">
+        <div class="container2">
+            <div class="author__title">Read more posts by this author</div>
+            <a class="author__link" href="{% url 'blog:writer' article.author %}">
+                <div class="author__left">
+                    <img class="author__photo" src="{{ article.author.image.url }}" alt="">
+                </div>
+                <div class="author__right">
+                    <div class="author__name">{{ article.author.name }}</div>
+                    <div class="author__info">{{ article.author.bio }}</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="olderpost">
+        <div class="container">
+            <div class="olderpost__inner">
+                <a class="olderpost__link" href="{% url 'blog:article' article.author.name recommended_article.name %}">
+                    <div class="olderpost__post">
+                        <div class="olderpost__text">older post</div>
+                        <div class="olderpost__title">{{ recommended_article.name }}</div>
+                    </div>
+                </a>
+           </div>
+        </div>
+    </div>
+
+
+    <div class="reviews">
+        <div class="container">
+            <div class="review">
+                <div class="container2">
+                    <form class="boxl" action="index.html" method="post">
+                        <div class="comment">
+                            <div class="comment__title">Comments</div>
+                            <div class="comment__text">
+                                <textarea class="comment__texting" type="text" name="" placeholder="Write your comment"></textarea>
+                            </div>
+                            <div>
+                                <input type="submit" name="" value="Submit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__footer">
+                <div class="footer__col">
+                    <div class="footer__logo">
+                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                    </div>
+                </div>
+                <div class="footer__col">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="copy__text">
+                    ©  2020 B&K. All Rights Reserved
+                </div>
+                <div class="copyright__author">
+                    <span class="copy__text">Made by</span>  Bogdankov Nikita <span class="copy__text"> and </span> Grigory Novikov
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
