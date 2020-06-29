@@ -329,63 +329,51 @@ h1,h2,h3,h4,h5,h6{
 
     margin-bottom: 60px;
 }
+.blogs__img{
+    width: 100%;
+    height:350px;
+    object-fit: cover;
+    border-radius: 20px;
 
+}
+
+.bi{
+    height: 450px;
+}
+.blogs__content{
+    margin-top: -350px;
+}
+.bc{
+    margin-top: -450px;
+}
 .bi11{
-    background:  linear-gradient(to right, #e77842, #f7c068) ;
     margin-right: 40px;
 }
 .bi12{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/snowcity.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
 }
 .bi13{
-    background: linear-gradient(to top, #f857a6, #ff5858) ;
     margin-right: 40px;
 }
 .bi14{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/girloran.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
 }
 .bi15{
-    background: linear-gradient(to top, #b53cff, #f952ff) ;
 }
 .bi16{
-    background: linear-gradient( rgba(249, 82, 255, 0.8),rgba(181, 60, 255, 0.8)), url("../images/music.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
 }
 .bi17{
-    background: linear-gradient(to top, #f857a6, #ff5858) ;
 }
 .bi18{
-    background:  linear-gradient(to right, #ffb040, #f7c068) ;
-    margin-right: 20px;
-    display: none;
-
-}
-.bi19{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/architecture.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
     display: none;
-
+}
+.bi19{
+    margin-right: 40px;
+    display: none;
 }
 .bi110{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/japan.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     display: none;
-
 }
 
 .blogs__item1:hover{
@@ -405,30 +393,15 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .bi21{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/food.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+
 }
 .bi22{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/oldman.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
 }
 .bi23{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/ceiling.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
 }
 
 .bi24{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/street.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
 }
 
@@ -448,13 +421,11 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .bi31{
-    background: linear-gradient(to bottom, #2b2d32, #32343a) ;
+
     margin-right: 40px;
 }
 
 .bi32{
-    background: url(../images/eye%20children.jpg) center no-repeat;
-    background-size: cover;
     margin-right: 40px;
 }
 
@@ -481,29 +452,16 @@ h1,h2,h3,h4,h5,h6{
     transition:.3s;
 }
 .bi41{
-  background:  linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/way.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin-right: 40px;
 }
 .bi42{
-    background:  linear-gradient(rgba(35, 189, 56,0.7), rgba(65, 235, 169,0.7)), url("../images/forestway.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
 }
 .bi43{
-    background: linear-gradient(to right top, #327ae7, #6bd0ff) ;
-    margin-right: 20px;
+    margin-right: 40px;
     display: none;
-
 }
 .bi44{
-    background: linear-gradient(to right , #ffb040, #ffd62e) ;
     display: none;
-
-
 }
 
 .blogs__item4:hover{
@@ -619,9 +577,8 @@ h1,h2,h3,h4,h5,h6{
     border-color: #e7a007;
     background: #e7a007;
     color: #000;
-
-
 }
+
 
 
 /*Footer
@@ -721,11 +678,24 @@ h1,h2,h3,h4,h5,h6{
     .blogs__item1{
         height: 300px;
     }
+    .blogs__img{
+        height: 300px;
+    }
 
 
     .blogs__item2{
         height: 300px;
         width: 64%;
+    }
+
+    .bi{
+        height: 450px;
+    }
+    .blogs__content{
+        margin-top: -300px;
+    }
+    .bc{
+        margin-top: -450px;
     }
 
     .blogs__item4{
@@ -830,6 +800,12 @@ h1,h2,h3,h4,h5,h6{
     .blogs__item3{
         height: 300px;
     }
+    .bi{
+        height: 300px;
+    }
+    .bc{
+        margin-top: -300px;
+    }
 
     .blogs__item4{
         height: 300px;
@@ -929,11 +905,11 @@ h1,h2,h3,h4,h5,h6{
     }
 
     .footer__footer{
-        display: block;
+        display: flex;
     }
     .footer__col{
         display: flex;
-        margin-left: 25%;
+
     }
     .fc1{
         margin-left: 48%;
@@ -941,6 +917,9 @@ h1,h2,h3,h4,h5,h6{
     }
     .copyright{
         margin-top: 10px;
+    }
+    .nv{
+        padding:0 15px 0 0;
     }
 }
 

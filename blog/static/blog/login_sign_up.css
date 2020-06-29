@@ -177,3 +177,40 @@ h1,h2,h3,h4,h5,h6{
     font-size: 15px;
     margin-left: 5px;
 }
+
+/*Media
+=============*/
+@media(max-width:414px){
+    .contact__right{
+        display: none;
+    }
+    .contact__left{
+        width: 100%;
+    }
+    .box{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .box input[type="email"],
+    .box input[type="password"],
+    .box input[type="text"]{
+        width: 200px;
+        margin: 0;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+    .box input[type="submit"]{
+        margin: 0;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+    .down__text{
+        margin: 0;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+    .down__link{
+        margin-top: 20px;
+
+    }
+}

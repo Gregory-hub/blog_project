@@ -173,3 +173,57 @@ h1,h2,h3,h4,h5,h6{
 
     color: #000;
 }
+/*Media
+===============*/
+@media(max-width:823px){
+    .contact__right{
+        display: none;
+    }
+    .contact__left{
+        width: 100%;
+    }
+    .contact{
+        display: block;
+    }
+    .box{
+        margin: 0;
+    }
+    .box input[type = "text"], .box input[type="email"] {
+        width:300px;
+        margin: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 30px;
+    }
+    .box textarea{
+        width: 300px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 30px;
+
+    }
+    .box input[type = "submit"]{
+        margin: 0;
+        margin-left: 30px;
+    }
+}
+@media(max-width:667px){
+    .box input[type = "text"], .box input[type="email"] {
+        width:300px;
+        margin: 0;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 30px;
+    }
+    .box textarea{
+        width: 300px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left: 30px;
+
+    }
+    .box input[type = "submit"]{
+        margin: 0;
+        margin-left: 30px;
+    }
+}

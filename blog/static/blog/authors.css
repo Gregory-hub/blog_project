@@ -457,6 +457,52 @@ h1,h2,h3,h4,h5,h6{
     .social__text{
         padding-left: 10px;
         padding-right: 5px;
+    }
+
+/*    Footer*/
+    .footer__col{
+        width: 50%;
+
+        display: flex;
 
     }
+    .fc1{
+        display: none;
+    }
+    .nv{
+        padding: 0 15px 0 0;
+    }
+    .footer__icon{
+        margin-left: 85%;
+    }
+
+}
+
+@media (max-width:667px){
+    .social__text{
+        font-size: 14px;
+    }
+    /*    FIxword*/
+    .fixword__text{
+        padding-top: 10px;
+    }
+}
+
+@media (max-width:568px){
+    .auth__item1{
+        margin-right: 10px;
+    }
+}
+
+@media (max-width:414px){
+    .auth__item1{
+        width: 100%;
+    }
+    .fc2{
+        display: none;
+    }
+    .copyright{
+        margin-top: 10px;
+    }
+
 }

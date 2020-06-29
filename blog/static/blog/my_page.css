@@ -234,6 +234,8 @@ h1,h2,h3,h4,h5,h6{
     border:0;
     background: #222327 ;
     outline: 0;
+    width: 250px;
+    height: 250px;
 }
 
 .intro__btn{
@@ -429,10 +431,23 @@ h1,h2,h3,h4,h5,h6{
 
 }
 
+
 .blogs__list{
     display: flex;
     flex-wrap: wrap;
+
+
 }
+
+.blogs__img{
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 20px;
+
+}
+
+
 
 .blogs__item1{
     width: 65.5%;
@@ -445,6 +460,7 @@ h1,h2,h3,h4,h5,h6{
     border-radius: 20px;
     transition:.3s;
 }
+
 
 .blogs__item2{
     width: 31%;
@@ -464,34 +480,32 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .bi1{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/food.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+
     margin-right: 40px;
 }
 
+
 .bi2{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/snowcity.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+
 }
 
 .bi3{
-    background: linear-gradient(to top, #f857a6, #ff5858) ;
+
     margin-right: 40px;
 }
 .bi4{
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url("../images/table.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+
 }
 
 .blogs__item1:hover{
     transform: translateY(-10px);
 }
+
+.blogs__content{
+    margin-top: -350px;
+
+}
+
 
 
 .blogs__fon{
@@ -540,6 +554,13 @@ h1,h2,h3,h4,h5,h6{
 
     color:#fff;
 
+}
+.disflex{
+    display: flex;
+    justify-content: space-between;
+}
+.bb{
+    margin-right: 20px;
 }
 
 .blogs__author{
@@ -800,4 +821,197 @@ h1,h2,h3,h4,h5,h6{
     font-size:14px;
 
 }
+
+/*Burger
+==============*/
+.burger{
+    display: none;
+    padding: 15px 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.burger__item{
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    font-size: 0;
+    color: transparent;
+    cursor: pointer;
+    position: relative;
+
+}
+
+
+
+
+.burger__item:before {
+    content: "";
+    height: 100%;
+    width: 28px;
+    background-color: #fff;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    top: -8px;
+}
+
+
+
+
+
+.burger__item:after {
+    content: "";
+    height: 100%;
+    width: 22px;
+    background-color: #fff;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    bottom: -8px;
+}
+
+
+/*Media
+===================*/
+@media (max-width:1024px){
+    .bi1{
+        margin-right: 30px;
+    }
+    .blogs__text{
+        padding-top: 10px;
+        height: 180px;
+    }
+    .bi3{
+        margin-right: 30px;
+    }
+
+}
+
+@media (max-width:823px){
+
+
+    .nav{
+        position: absolute;
+        right: 0;
+        display: none;
+        text-align: right;
+        width: 50%;
+        top: 60%;
+        background:#e7a007;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .nav.show{
+        display: flex;
+    }
+
+    .nav__link--sign{
+        margin-right: 25px;
+    }
+    .nv--li{
+        padding: 7px 40px;
+    }
+
+    .nav__link{
+        padding: 7px 40px;
+    }
+    .nav__photosearch{
+        margin-right: 40px;
+        margin-bottom: 10px;
+    }
+
+    .burger{
+        display: block;
+    }
+/*    Intro*/
+    .intro__btn{
+        padding: 0;
+    }
+    .box textarea{
+        width: 200px;
+    }
+/*    BLog*/
+    .bi1{
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .blogs__text{
+        font-size: 20px;
+        padding: 10px 20px;
+    }
+    .bi2{
+        width: 48%;
+        margin-right: 30px;
+    }
+    .bi3{
+        width: 47%;
+        margin-right: 0;
+    }
+    .bi4{
+        width: 100%;
+    }
+/*    Footer*/
+    .footer__col{
+        display: flex;
+        width: 50%;
+    }
+    .fc1{
+        display: none;
+    }
+    .nv{
+        padding: 0;
+        padding-right: 20px;
+    }
+    .footer__icon{
+        margin-left: 90%;
+    }
+}
+
+@media (max-width:667px){
+
+    .intro__left{
+        margin-right: 10px;
+    }
+    .intro__btn{
+        letter-spacing: 0;
+    }
+    .blogs__item2{
+        width: 100%;
+        margin-right: 0;
+    }
+    .fixword__text{
+        padding-top: 10px;
+    }
+    .boxl input[type="title"]{
+        width: 150px;
+    }
+    .boxl textarea{
+        height: 400px;
+    }
+
+}
+
+@media (max-width:414px){
+    .intro__left{
+        width: 100%;
+        margin-right: 0;
+    }
+    .intro__inner{
+        flex-wrap: wrap;
+    }
+    .intro__right{
+        width: 100%;
+    }
+/*    Footer*/
+    .fc2{
+        display: none;
+        margin-right: 100%;
+    }
+}
+
 
