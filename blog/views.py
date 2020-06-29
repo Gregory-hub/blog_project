@@ -36,41 +36,52 @@ def render_empty_form(request, form, template, message=''):
 
 
 def index(request):
-    if Article.objects.count() >= 17:
-        articles_init = Article.objects.order_by('-pub_date')[17]
+    if Article.objects.count() > 40:
+        articles_old = Article.objects.order_by('-pub_date')[random.randint(20, 40)]
     else:
-        articles_init = list(Article.objects.order_by('-pub_date'))
+        articles_old = list(Article.objects.order_by('-pub_date'))
 
     comments_nums = []
-    for article in articles_init:
+    for article in articles_old:
         comments_nums.append(article.comment_set.count())
 
-    articles_old = []
-    for i in range(len(comments_nums)):
-        articles_old.append(articles_init.pop(max(comments_nums)))
-    print(articles_old)
-
-    article1 = articles_old.pop(0)
     articles = []
-    while len(articles_old) > 1:
-        if 2 <= len(articles_old) <= 3:
-            articles.append([random.randint(1, 3), articles_old])
-            articles_old = []
-        mode = random.randint(1, 4)
-        if mode == 4:
-            articles.append([mode, articles_old[:3]])
-            articles_old = articles_old[3:]
+    for i in range(len(comments_nums)):
+        articles.append(articles_old.pop(max(comments_nums)))
+
+    if len(articles) > 0:
+        article1 = articles.pop(0)
+    else:
+        article1 = None
+
+    groups = []
+    while len(articles) > 1:
+        if len(articles) == 4:
+            slice, articles = articles[len(articles)-2:], articles[:len(articles)-2]
+            groups.append([random.randint(1, 3), slice])
+        if len(articles) == 3:
+            groups.append([random.randint(4, 5), articles])
+            break
+        elif len(articles) == 2:
+            groups.append([random.randint(1, 3), articles])
+            break
+
+        mode = random.randint(1, 5)
+        if 1 <= mode <= 3:
+            slice, articles = articles[len(articles)-2:], articles[:len(articles)-2]
+            groups.append([mode, slice])
         else:
-            articles.append([mode, articles_old[:2]])
-            articles_old = articles_old[2:]
-        print(articles)
+            slice, articles = articles[len(articles)-3:], articles[:len(articles)-3]
+            groups.append([mode, slice])
+
+
+    print(*groups, sep='\n')
 
     context = {
         'article1': article1,
-        'articles': articles,
+        'groups': groups,
         'authenticated': request.user.is_authenticated
     }
-    print(context)
 
     template = 'blog/blog_index.html'
     return render(request, template, context)

@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'blog/blog_index.css' %}">
-    <script src="{% static 'blog/js/app2.js' %}"></script>
+    <script src="{% static 'blog/js/blog_index.js' %}"></script>
 
 </head>
 <body>
@@ -69,431 +69,291 @@
 <div class="intro" id="intro">
     <div class="intro__slider" id="introSlider">
         <div class="slick-item">
+{% if article1 %}
             <div class="intro__item">
                 <div class="intro__photo">
-                    <img class="intro__img" src="{{ article1.image.url }}">
+                    <img class="intro__img" src="{% static 'blog/images/food.jpg' %}" alt="">
                 </div>
                 <div class="intro__content">
                     <div class="intro__featured">
                         <div class="intro__f">
-                            <div class="intro__star">
-                                <img class="intro__stars" src="{% static 'blog/images/star.svg' %}" alt="">
+                           <div class="intro__star">
+                                <img class="intro__stars" src="{% static 'blog/images/star.svg' %}">
                             </div>
                                 <div class="intro__featured--text">featured</div>
                         </div>
                     </div>
-                    <div class="intro__title"><a class="intro__title--text" href="{% url 'blog:article' article1.author.name article1.name %}">{{ article1.text }}</a></div>
-                    <div class="intro__author"><span class="intro__author--b">by</span> <a class="intro__link" href="{% url 'blog:writer' article1.author.name %}">{{ article1.author.name }}</a> <span class="intro__author--sm">{{ article1.pub_date }}</span></div>
+                    <div class="intro__title"><a class="intro__title--text" href="{% url 'blog:article' article1.author.name article1.name %}">{{ article1.name }}</a></div>
+                    <div class="intro__author"><span class="intro__author--b">by</span><a class="intro__link" href="{% url 'blog:writer' article1.author.name %}"> {{ article1.author.name }}</a><span class="intro__author--sm"> on {{ article1.pub_date }}</span></div>
                 </div>
             </div>
-        </div>
-    </div>
+{% else %}
+    <p><h2 style="text-align: center;">This site is fucking empty</h2></p>
+{% endif %}
 </div>
-
+</div>
+</div>
 
 
 <div class="blogs">
     <div class="container">
         <div class="blog">
-            <div class="blogs__item1 bi11">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                           <img src="https://placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">The future of         architecture is culture
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 3 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
 
-            </div>
+            {% if groups|length > 0 %}
+                {% for group in groups %}
 
-            <div class="blogs__item2 bi21">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/food.jpg" alt="" class="blogs__img ">
-                        <div class="blogs__content ">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">I'm passionate about food, the tradition of it, cooking it, sharing it
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 5 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">lifestyle</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
+                    {% if group.0 == 1 %}
+                    <!-- 12 -->
 
-            <div class="blogs__item3 bi31">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                           <img src="https://placehold.it/250x250" alt="" class="blogs__img bi">
-                        <div class="blogs__content bc">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Architecture belongs to culture, not to civilization
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="#">Grigory Novikov</a><span class="blogs__s"> 2 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">people</a>
-                            </div>
+                        <!-- bi11 -->
+                        <div class="blogs__item1 bi11">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
 
-              <div class="blogs__item3 bi32">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/eye%20children.jpg" alt="" class="blogs__img bi">
-                        <div class="blogs__content bc">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Look at life with the eyes of a child
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 2 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">people</a>
-                            </div>
+                        <!-- bi21 -->
+                        <div class="blogs__item2 bi21">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
+                    {% endif %}
 
-            <div class="blogs__item3 bi33">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/table.jpg" alt="" class="blogs__img bi">
-                        <div class="blogs__content bc">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">I think it's the responsibility of a designer to try to break rules and barriers
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 10 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">Design</a>
-                            </div>
+                    {% if group.0 == 2 %}
+                    <!-- 21 -->
+                        <div class="blogs__item1 bi22">
+                            <!-- bi22 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
+                        <div class="blogs__item1 bi15">
+                            <!-- bi15 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
 
-            <div class="blogs__item1 bi12">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/snowcity.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Every day, in every city and town across the country
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 7 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">education</a>
-                            </div>
+                    {% if group.0 == 3 %}
+                    <!-- 1.5 1.5 -->
+                        <div class="blogs__item1 bi41">
+                            <!-- bi41 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
+                        <div class="blogs__item1 bi42">
+                            <!-- bi42 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
 
-            <div class="blogs__item1 bi13">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https://placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content ">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Education is the transmission of civilization
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 16 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">education</a>
-                            </div>
+                    {% if group.0 == 4 %}
+                    <!-- 111 high -->
+                        <div class="blogs__item1 bi31">
+                            <!-- bi31 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
+                        <div class="blogs__item1 bi32">
+                            <!-- bi32 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="blogs__item1 bi33">
+                        <!-- bi33 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.2.author.name %}">{{ group.1.2.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.2.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.2.tag.name %}">{{ group.1.2.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
 
-            <div class="blogs__item1 bi14">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/girloran.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Pop culture is a reflection
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Novikov Grigory</a><span class="blogs__s"> 1 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">culture</a>
-                            </div>
+                    {% if group.0 == 5 %}
+                    <!-- 111 low -->
+                        <div class="blogs__item1 bi12">
+                            <!-- bi12 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
+                        <div class="blogs__item1 bi13">
+                            <!-- bi13 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                        <div class="blogs__item1 bi14">
+                            <!-- bi14 -->
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
+                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' group.1.2.author.name %}">{{ group.1.2.author.name }}</a>
+                                            <span class="blogs__s"> on {{ group.1.2.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.2.tag.name %}">{{ group.1.2.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endif %}
 
-            <div class="blogs__item2 bi22">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/oldman.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">The creation of beauty is art
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Novikov Grigory</a><span class="blogs__s"> 6 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi15">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https:placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">You must grow like a tree
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 3 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">lifestyle</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi16">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/music.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">The true beauty of music is that it connects people
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 8 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">people</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item2 bi23">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/ceiling.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">I cannot look at modern buildings without thinking of historical ones
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 23 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">architecture</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item2 bi24">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/street.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Change is always happening
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 15 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">culture</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi17">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https:/placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Everything has beauty, but not everyone sees it
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 1 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-             <div class="blogs__item4 bi41">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/way.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">The sky perfectly blended into the beautiful landscape
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 6 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">nature</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item4 bi42">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/forestway.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">The journey of a thousand miles
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 8 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">Journey</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi18" id="bi18">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https://placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">When you are on your way to home
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 5 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi19" id="bi19">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/architecture.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">Architecture is a visual art, and the buildings speak for themselves
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Grigory Novikov</a><span class="blogs__s"> 21 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">architecture</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item1 bi110" id="bi110">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="../images/japan.jpg" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">I love Japan, and Tokyo is my favorite city
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 28 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item4 bi43" id="bi43">
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https://placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">A mind cannot be independent of culture
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 4 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">Education</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-            <div class="blogs__item4 bi44" id="bi44" >
-                <article>
-                    <a class="blogs__fon"  href="article.html">
-                       <img src="https://placehold.it/250x250" alt="" class="blogs__img">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="article.html">    <h2 class="blogs__text">A mind cannot be independent of culture
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="user_public.html">Bogdankov Nikita</a><span class="blogs__s"> 10 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="tag.html">story</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
@@ -506,10 +366,20 @@
                     <a class="header__logotype" href="">Blog BN</a>
                 </div>
             </div>
-            <<div class="footer__col">
-                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
-                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
-                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+            <div class="footer__col fc2">
+                <a class="nv--li nv" href="#">Main</a>
+                <a class="nav__link nv" href="contact.html">Contact</a>
+                <a class="nav__link nv" href="authors.html">Authors</a>
+                <a class="nav__link nv" href="tags.html">Tags</a>
+            </div>
+            <div class="footer__col fc1">
+                <div class="footer__icon">
+                    <a href="#">
+                        <div>
+                            <img class="footer__iconph" src="../images/icon.png" alt="">
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="copyright">
@@ -524,7 +394,7 @@
 </footer>
 
 <!--JavaScript-->
-<script src="{% static 'js/app2.js' %}"></script>
+<script src="{% static 'blog/js/blog_index.js' %}"></script>
 
 </body>
 </html>
