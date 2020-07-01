@@ -5,8 +5,10 @@
     <title>Blog BN</title>
     <meta name="google" content="notranslate" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <link rel="stylesheet" href="{% static 'blog/writer.css' %}">
+    <script src=" {% static 'blog/js/writer.js' %}"></script>
 </head>
 <body>
 
@@ -17,31 +19,35 @@
         </symbol>
     </svg>
 
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
 
-            <div class="header__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                <div class="header__logo">
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+
+                <nav class="nav">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                    {% if authenticated %}
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                    {% else %}
+                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                    {% endif %}
+                         <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
+                </nav>
+                <button class="burger" type="button" id="navToggle" >
+                    <span class="burger__item">Menu</span>
+                </button>
             </div>
-
-            <nav class="nav">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class="nav__link" href="authors.html">Authors</a>
-                <a class="nav__link" href="tags.html">Tags</a>
-                <a class="nav__link--sign" href="sign_in.html">Sign in</a>
-                <a class="nav__link--sign" href="sign_up.html">Sign up</a>
-                <a class="nav__link--sign" href="add.html">Your page</a>
-                <a class="nav__photo" href="#">
-                    <svg class="nav__photosearch">
-                        <use xlink:href="#search"> </use>
-                    </svg>
-                </a>
-            </nav>
         </div>
-    </div>
-</header>
+    </header>
 
 <div class="fixword">
     <div class="fixword__text">
@@ -52,29 +58,18 @@
 <div class="intro">
     <div class="container">
         <div class="intro__inner">
-            <div class="intro__left">
 
+            <div class="intro__left">
                 <div class="intro__photo">
-                    <img src="https://placehold.it/250x250" alt="" class="intro__img">
+                    <img src="{{ writer.image.url }}" class="intro__img">
                 </div>
 
-                <form class="boxx" id="boxx" action="add.html" method="post">
-                    <input id="inpu" type=hidden name=MAX_FILE_SIZE value=64000>
-                    <input  id="af" name=avatarfile type=file>
-                    <iframe id="hf" name="hiddenframe" style="width:0px; height:0px; border:0px"></iframe>
-                    <input id="ib" type="submit" name="" value="Save">
-
-                </form>
             </div>
 
             <div class="intro__right">
-                <div class="intro__name">Bogdankov Nikita</div>
-                <div class="intro__age" id="age">16 years old</div>
-                <div class="intro__text" >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore hic doloribus, obcaecati quidem sit nam est nobis nesciunt ex similique repellendus animi. Doloribus, labore esse vel obcaecati architecto dolores eaque cumque neque officiis veritatis iste, numquam voluptate, totam alias eligendi cupiditate aliquid temporibus natus. Doloribus facilis quibusdam rem, dolores odit modi consequuntur excepturi neque asperiores autem. Iure, doloribus eveniet est obcaecati sunt itaque mollitia aperiam impedit beatae architecto tenetur repudiandae pariatur quaerat accusantium cum dolores ad nemo voluptates qui!</div>
-
-
-
-
+                <div class="intro__name">{{ writer.name }}</div>
+                <div class="intro__age" id="age">Age: {{ writer.age }}</div>
+                <div class="intro__text" >{{ writer.bio }}</div>
             </div>
         </div>
     </div>
@@ -84,108 +79,47 @@
     <div class="container">
         <div class="blog">
             <div class="blogs__title">Blogs</div>
-            <div class="blogs__list">
 
-                <div class="blogs__item1 bi1">
-                    <article>
-                        <a class="blogs__fon"  href="#">
-                            <div class="blogs__content">
-                                <a class="blogs__texting" href="#">    <h2 class="blogs__text">I'm passionate about food, the tradition of it, cooking it, sharing it
-                                </h2>
+            {% if articles|length > 0 %}
+                {% for article in articles %}
+
+                        <div class="blogs__item1 bi14">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' article.author.name article.name %}">
+                                    <img src="{{ article.image.url }}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' article.author.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
+                                            <span class="blogs__s"> on {{ article.pub_date }}</span>
+                                        </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
+                                        </div>
+                                    </div>
                                 </a>
-                                <div class="blogs__auth">
-                                   <span class="blogs__s">by</span> <a class="blogs__author" href="#">Bogdankov Nikita</a><span class="blogs__s"> 5 days ago</span>
-                                </div>
-                                <div class="blogs__btn">
-                                <a class="blogs__btn--btn" href="#">lifestyle</a>
-                                </div>
-                            </div>
-                        </a>
-                    </article>
-                </div>
-
-                <div class="blogs__item2 bi2">
-                    <article>
-                    <a class="blogs__fon"  href="#">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="#">    <h2 class="blogs__text">Every day, in every city and town across the country
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="#">Bogdankov Nikita</a><span class="blogs__s"> 7 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="#">education</a>
-                            </div>
+                            </article>
                         </div>
-                    </a>
-                </article>
-            </div>
 
-            <div class="blogs__item2 bi3">
-                <article>
-                    <a class="blogs__fon"  href="#">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="#">    <h2 class="blogs__text">Education is the transmission of civilization
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="#">Bogdankov Nikita</a><span class="blogs__s"> 16 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="#">education</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-
-                <div class="blogs__item1 bi4">
-                <article>
-                    <a class="blogs__fon"  href="#">
-                        <div class="blogs__content">
-                            <a class="blogs__texting" href="#">    <h2 class="blogs__text">I think it's the responsibility of a designer to try to break rules and barriers
-                                </h2>
-                            </a>
-                            <div class="blogs__auth">
-                               <span class="blogs__s">by</span> <a class="blogs__author" href="#">Bogdankov Nikita</a><span class="blogs__s"> 10 days ago</span>
-                            </div>
-                            <div class="blogs__btn">
-                            <a class="blogs__btn--btn" href="#">Design</a>
-                            </div>
-                        </div>
-                    </a>
-                </article>
-            </div>
-            </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
-
-
 
 <footer class="footer">
     <div class="container">
         <div class="footer__footer">
             <div class="footer__col">
                 <div class="footer__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
             </div>
             <div class="footer__col">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class="nav__link" href="authors.html">Authors</a>
-                <a class="nav__link" href="tags.html">Tags</a>
-            </div>
-            <div class="footer__col">
-                <div class="footer__icon">
-                    <a href="#">
-                        <div>
-                            <img class="footer__iconph" src="../images/icon.png" alt="">
-                        </div>
-                    </a>
-                </div>
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
         </div>
         <div class="copyright">
@@ -201,8 +135,7 @@
 
 
 <!--JavaScript-->
-<script src="../js/app.js"></script>
-
+<script src="{% static 'blog/js/my_page.js' %}"></script>
 
 </body>
 </html>

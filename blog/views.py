@@ -24,6 +24,7 @@ def get_groups(article_set):
     Returned list format: [[mode, articles], [mode, articles], ...]
     mode is mode to display articles in browser
     """
+    # get latest articles(max: 40)
     if len(article_set) == 0:
         return []
     if Article.objects.count() > 40:
@@ -31,6 +32,7 @@ def get_groups(article_set):
     else:
         articles_old = list(Article.objects.order_by('-pub_date'))
 
+    # order articles by num of comments
     comments_nums = []
     for article in articles_old:
         comments_nums.append(article.comment_set.count())
@@ -39,6 +41,7 @@ def get_groups(article_set):
     for i in range(len(comments_nums)):
         articles.append(articles_old.pop(max(comments_nums)))
 
+    # group articles
     groups = []
     while len(articles) > 1:
         if len(articles) == 4:
@@ -154,16 +157,18 @@ def writer(request, writer_name):
 
     writer = get_object_or_404(Writer, name=writer_name)
 
-    groups = get_groups(writer.article_set.all())
-    if groups == []:
+    articles = writer.article_set.order_by('-pub_date')
+    if articles == []:
         message = 'No articles'
     else:
         message = ''
+    authenticated = request.user.is_authenticated
 
     context = {
         'message': message,
         'writer': writer,
-        'groups': groups,
+        'articles': articles,
+        'authenticated': authenticated,
     }
     return render(request, template, context)
 
@@ -176,8 +181,8 @@ def my_page(request):
 
     writer = get_object_or_404(Writer, name=request.user.username)
 
-    groups = get_groups(writer.article_set.all())
-    if groups == []:
+    articles = writer.article_set.order_by('-pub_date')
+    if articles == []:
         message = 'No articles'
     else:
         message = ''
@@ -189,7 +194,7 @@ def my_page(request):
     context = {
         'message': message,
         'writer': writer,
-        'groups': groups,
+        'articles': articles,
         'image_form': image_form,
         'bio_form': bio_form,
         'add_form': add_form,

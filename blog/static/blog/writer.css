@@ -668,7 +668,7 @@ h1,h2,h3,h4,h5,h6{
     right: 5%;
 }
 
-.boxl input[type = "title"]{
+.boxl input[type = "text"]{
     border: 0;
     display: none;
     background: none;
@@ -688,7 +688,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-.boxl input[type = "title"]:focus{
+.boxl input[type = "text"]:focus{
     border-color: #e7a007;
 }
 
@@ -1010,5 +1010,3 @@ h1,h2,h3,h4,h5,h6{
         margin-right: 100%;
     }
 }
-
-

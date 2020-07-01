@@ -120,258 +120,27 @@
             <div class="blogs__title">My articles</div>
             <div class="blogs__list">
 
-                {% if groups|length > 0 %}
-                    {% for group in groups %}
+                {% if articles|length > 0 %}
+                    {% for article in articles %}
 
-                        {% if group.0 == 1 %}
-                        <!-- 12 -->
-
-                            <!-- bi11 -->
-                            <div class="blogs__item1 bi11">
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                        <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-
-                            <!-- bi21 -->
-                            <div class="blogs__item2 bi21">
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                        <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                        {% endif %}
-
-                        {% if group.0 == 2 %}
-                        <!-- 21 -->
-                            <div class="blogs__item1 bi22">
-                                <!-- bi22 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                        <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                            <div class="blogs__item1 bi15">
-                                <!-- bi15 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                        <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                        {% endif %}
-
-                        {% if group.0 == 3 %}
-                        <!-- 1.5 1.5 -->
-                            <div class="blogs__item1 bi41">
-                                <!-- bi41 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                        <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                            <div class="blogs__item1 bi42">
-                                <!-- bi42 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                        <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                        {% endif %}
-
-                        {% if group.0 == 4 %}
-                        <!-- 111 high -->
-                            <div class="blogs__item1 bi31">
-                                <!-- bi31 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                        <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                            <div class="blogs__item1 bi32">
-                                <!-- bi32 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                        <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                            <div class="blogs__item1 bi33">
-                            <!-- bi33 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
-                                        <img src="{{ group.1.2.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.2.author.name %}">{{ group.1.2.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.2.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.2.tag.name %}">{{ group.1.2.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                        {% endif %}
-
-                        {% if group.0 == 5 %}
-                        <!-- 111 low -->
-                            <div class="blogs__item1 bi12">
-                                <!-- bi12 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                        <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.0.author.name %}">{{ group.1.0.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.0.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.0.tag.name %}">{{ group.1.0.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
-                            <div class="blogs__item1 bi13">
-                                <!-- bi13 -->
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                        <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.1.author.name %}">{{ group.1.1.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.1.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.1.tag.name %}">{{ group.1.1.tag.name }}</a>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </article>
-                            </div>
                             <div class="blogs__item1 bi14">
-                                <!-- bi14 -->
                                 <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
-                                        <img src="{{ group.1.2.image.url }}" class="blogs__img">
+                                    <a class="blogs__fon"  href="{% url 'blog:article' article.author.name article.name %}">
+                                        <img src="{{ article.image.url }}" class="blogs__img">
                                         <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
+                                            <a class="blogs__texting" href="{% url 'blog:article' article.author.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
                                             <div class="blogs__auth">
                                                 <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' group.1.2.author.name %}">{{ group.1.2.author.name }}</a>
-                                                <span class="blogs__s"> on {{ group.1.2.pub_date }}</span>
+                                                <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
+                                                <span class="blogs__s"> on {{ article.pub_date }}</span>
                                             </div>
                                             <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' group.1.2.tag.name %}">{{ group.1.2.tag.name }}</a>
+                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
                                             </div>
                                         </div>
                                     </a>
                                 </article>
                             </div>
-                        {% endif %}
 
                     {% endfor %}
                 {% endif %}
