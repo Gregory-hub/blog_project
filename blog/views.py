@@ -155,7 +155,7 @@ def writer(request, writer_name):
     writer = get_object_or_404(Writer, name=writer_name)
 
     groups = get_groups(writer.article_set.all())
-    if articles == []:
+    if groups == []:
         message = 'No articles'
     else:
         message = ''
