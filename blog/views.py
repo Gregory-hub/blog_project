@@ -1,6 +1,5 @@
 import random
 import datetime
-import string
 import os
 
 from django.shortcuts import render, get_object_or_404, get_list_or_404
@@ -19,25 +18,16 @@ from .models import Article, Writer
 from .forms import *
 
 
-def upload_file(dest, file):
-    filename = default_storage.get_available_name(os.path.join(dest, file.name))
-    with open(filename, 'wb+') as dest:
-        for c in file.chunks():
-            dest.write(c)
-    return filename
-
-
-def render_empty_form(request, form, template, message=''):
-    context = {
-        'message': message,
-        'form': form,
-    }
-    return render(request, template, context)
-
-
-def index(request):
+def get_groups(article_set):
+    """
+    Sorts latest articles by number of comments and group them by 2 and 3
+    Returned list format: [[mode, articles], [mode, articles], ...]
+    mode is mode to display articles in browser
+    """
+    if len(article_set) == 0:
+        return []
     if Article.objects.count() > 40:
-        articles_old = Article.objects.order_by('-pub_date')[random.randint(20, 40)]
+        articles_old = article_set.order_by('-pub_date')[random.randint(20, 40)]
     else:
         articles_old = list(Article.objects.order_by('-pub_date'))
 
@@ -48,11 +38,6 @@ def index(request):
     articles = []
     for i in range(len(comments_nums)):
         articles.append(articles_old.pop(max(comments_nums)))
-
-    if len(articles) > 0:
-        article1 = articles.pop(0)
-    else:
-        article1 = None
 
     groups = []
     while len(articles) > 1:
@@ -73,7 +58,35 @@ def index(request):
         else:
             slice, articles = articles[len(articles)-3:], articles[:len(articles)-3]
             groups.append([mode, slice])
+    return groups
 
+
+def upload_file(dest, file):
+    filename = default_storage.get_available_name(os.path.join(dest, file.name))
+    with open(filename, 'wb+') as dest:
+        for c in file.chunks():
+            dest.write(c)
+    return filename
+
+
+def render_empty_form(request, form, template, message=''):
+    context = {
+        'message': message,
+        'form': form,
+    }
+    return render(request, template, context)
+
+
+def index(request):
+    template = 'blog/blog_index.html'
+
+    articles = list(Article.objects.all())
+    if len(articles) > 0:
+        article1 = articles.pop(0)
+        groups = get_groups(articles)
+    else:
+        article1 = None
+        groups = []
 
     print(*groups, sep='\n')
 
@@ -82,8 +95,6 @@ def index(request):
         'groups': groups,
         'authenticated': request.user.is_authenticated
     }
-
-    template = 'blog/blog_index.html'
     return render(request, template, context)
 
 
@@ -93,17 +104,23 @@ def article(request, writer_name, article_name):
     writer = get_object_or_404(Writer, name=writer_name)
     article = get_object_or_404(Article, name=article_name)
 
-    recommended_article = writer.article_set.exclude(name=article.name).order_by('-pub_date')[0]
+    if writer.article_set.exclude(name=article.name).exists():
+        recommended_article = writer.article_set.exclude(name=article.name).order_by('-pub_date')[0]
+    else:
+        recommended_article = None
 
     form = CommentForm()
-
     context = {
         'article': article,
         'form': form,
         'recommended_article': recommended_article,
-        'comments': Comment.objects.filter(article=article),
+        'comments': article.comment_set.order_by('-comment_date'),
         'message': '',
+        'authenticated': request.user.is_authenticated,
     }
+    if not context['authenticated']:
+        context['message'] = 'You cannot comment. Login to unlock this privelegy'
+
 
     if request.method == 'GET':
         return render(request, template, context)
@@ -134,9 +151,10 @@ def article(request, writer_name, article_name):
 
 def writer(request, writer_name):
     template = 'blog/writer.html'
+
     writer = get_object_or_404(Writer, name=writer_name)
 
-    articles = list(writer.article_set.order_by('-pub_date'))
+    groups = get_groups(writer.article_set.all())
     if articles == []:
         message = 'No articles'
     else:
@@ -144,52 +162,43 @@ def writer(request, writer_name):
 
     context = {
         'message': message,
-        'name': writer.name,
-        'articles': articles,
+        'writer': writer,
+        'groups': groups,
     }
     return render(request, template, context)
 
 
 def my_page(request):
     template = 'blog/my_page.html'
+
     if not request.user.is_authenticated:
         return HttpResponse('<h1>401 unauthorized</h1>', status=401)
 
-    try:
-        writer = Writer.objects.get(name=request.user.username)
-    except Writer.DoesNotExist:
-        return HttpResponseRedirect(reverse('blog:index'))
+    writer = get_object_or_404(Writer, name=request.user.username)
 
-    articles = list(writer.article_set.order_by('-pub_date'))
-    if articles == []:
+    groups = get_groups(writer.article_set.all())
+    if groups == []:
         message = 'No articles'
     else:
         message = ''
-
-    types = []
-    for i in range(len(articles)):
-        types.append(articles.index(articles[i]) % 4)
-    articles = dict(zip(articles, types))
 
     add_form = AddForm()
     image_form = WriterImageForm()
     bio_form = WriterBioForm(initial={'age': writer.age, 'bio': writer.bio})
 
-
     context = {
         'message': message,
         'writer': writer,
+        'groups': groups,
         'image_form': image_form,
         'bio_form': bio_form,
         'add_form': add_form,
-        'articles': articles,
     }
 
     if request.method == 'GET':
         return render(request, template, context)
 
     elif request.method == 'POST':
-        print(request.POST)
 
         if 'bio_form' in request.POST:
 
@@ -235,7 +244,8 @@ def my_page(request):
                     context['message'] = 'This name is not available'
                     return render(request, template, context)
             else:
-                return render_empty_form(request, form, template, 'Form is invalid')
+                context['message'] = 'Form is invalid'
+                return render(request, template, context)
 
         elif 'image_form' in request.POST:
 
@@ -253,6 +263,7 @@ def my_page(request):
 
 def my_article(request, article_name):
     template = 'blog/my_article.html'
+
     if not request.user.is_authenticated:
         return HttpResponse('<h1>401 unauthorized</h1>', status=401)
 
@@ -261,12 +272,7 @@ def my_article(request, article_name):
         article = writer.article_set.get(name=article_name)
 
         context = {
-            'author': article.author,
-            'name': article.name,
-            'text': article.text,
-            'tag': article.tag,
-            'pub_date': article.pub_date,
-            'last_edit': article.last_edit,
+            'article': article,
             'comments': Comment.objects.filter(article=article),
             'form1': DeleteButton,
             'form2': EditButton,
@@ -292,43 +298,6 @@ def my_article(request, article_name):
                 return HttpResponseRedirect(reverse('blog:my_article', args=(article_name, )))
 
         return HttpResponseRedirect(reverse('blog:my_page'))
-
-
-def add(request):
-    template = 'blog/add.html'
-
-    user = request.user
-    if not user.is_authenticated:
-        return HttpResponseRedirect(reverse('blog:index'))
-
-    if request.method == 'GET':
-        form = AddForm()
-        return render_empty_form(request, form, 'blog/add.html')
-
-    elif request.method == 'POST':
-        form = AddForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            text = form.cleaned_data['text']
-            tag_name = form.cleaned_data['tag']
-
-            tag = get_object_or_404(Tag, name=tag_name)
-            writer = Writer.objects.get(name=user.username)
-
-            if list(writer.article_set.filter(name=name)) == []:
-                writer.article_set.create(
-                    author=writer,
-                    name=name,
-                    text = text,
-                    tag = tag,
-                    pub_date=timezone.now(),
-                    last_edit=timezone.now(),
-                )
-                return HttpResponseRedirect(reverse('blog:my_page'))
-            else:
-                return render_empty_form(request, form, template, "This name is not available")
-        else:
-            return render_empty_form(request, form, template, 'Form is invalid')
 
 
 def edit(request, article_name):
@@ -378,7 +347,7 @@ def edit(request, article_name):
             return render(request, template, context)
 
 
-def login(request):
+def log_in(request):
     template = 'blog/login.html'
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('blog:index'))

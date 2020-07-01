@@ -827,6 +827,7 @@ h1,h2,h3,h4,h5,h6{
         width: 48%;
         margin-right: 25px;
     }
+
     .bi32{
         width: 48%;
         margin-right: 0;
@@ -852,8 +853,8 @@ h1,h2,h3,h4,h5,h6{
         margin-right: 0;
     }
     .bi15{
-        width: 48%;
-        margin-right: 25px;
+        width: 100%;
+
     }
     .bi16{
         width: 48%;

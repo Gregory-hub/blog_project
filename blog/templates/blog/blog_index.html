@@ -69,29 +69,29 @@
 <div class="intro" id="intro">
     <div class="intro__slider" id="introSlider">
         <div class="slick-item">
-{% if article1 %}
-            <div class="intro__item">
-                <div class="intro__photo">
-                    <img class="intro__img" src="{% static 'blog/images/food.jpg' %}" alt="">
-                </div>
-                <div class="intro__content">
-                    <div class="intro__featured">
-                        <div class="intro__f">
-                           <div class="intro__star">
-                                <img class="intro__stars" src="{% static 'blog/images/star.svg' %}">
-                            </div>
-                                <div class="intro__featured--text">featured</div>
-                        </div>
+            {% if article1 %}
+                <div class="intro__item">
+                    <div class="intro__photo">
+                        <img class="intro__img" src="{{ article1.image.url }}">
                     </div>
-                    <div class="intro__title"><a class="intro__title--text" href="{% url 'blog:article' article1.author.name article1.name %}">{{ article1.name }}</a></div>
-                    <div class="intro__author"><span class="intro__author--b">by</span><a class="intro__link" href="{% url 'blog:writer' article1.author.name %}"> {{ article1.author.name }}</a><span class="intro__author--sm"> on {{ article1.pub_date }}</span></div>
-                </div>
+                    <div class="intro__content">
+                        <div class="intro__featured">
+                            <div class="intro__f">
+                               <div class="intro__star">
+                                    <img class="intro__stars" src="{% static 'blog/images/star.svg' %}">
+                                </div>
+                                    <div class="intro__featured--text">featured</div>
+                            </div>
+                        </div>
+                        <div class="intro__title"><a class="intro__title--text" href="{% url 'blog:article' article1.author.name article1.name %}">{{ article1.name }}</a></div>
+                        <div class="intro__author"><span class="intro__author--b">by</span><a class="intro__link" href="{% url 'blog:writer' article1.author.name %}"> {{ article1.author.name }}</a><span class="intro__author--sm"> on {{ article1.pub_date }}</span></div>
+                    </div>
             </div>
-{% else %}
-    <p><h2 style="text-align: center;">This site is fucking empty</h2></p>
-{% endif %}
-</div>
-</div>
+            {% else %}
+                <p><h2 style="text-align: center;">This site is fucking empty</h2></p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 
@@ -109,7 +109,7 @@
                         <div class="blogs__item1 bi11">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -129,7 +129,7 @@
                         <div class="blogs__item2 bi21">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -152,7 +152,7 @@
                             <!-- bi22 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -171,7 +171,7 @@
                             <!-- bi15 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -194,7 +194,7 @@
                             <!-- bi41 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -213,7 +213,7 @@
                             <!-- bi42 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -236,7 +236,7 @@
                             <!-- bi31 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -255,7 +255,7 @@
                             <!-- bi32 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -274,7 +274,7 @@
                         <!-- bi33 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.2.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -297,7 +297,7 @@
                             <!-- bi12 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -316,7 +316,7 @@
                             <!-- bi13 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -335,7 +335,7 @@
                             <!-- bi14 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
-                                    <img src="{% static 'blog/images/food.jpg' %}" class="blogs__img">
+                                    <img src="{{ group.1.2.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }} {{ group.0 }}</h2></a>
                                         <div class="blogs__auth">
@@ -367,14 +367,13 @@
                 </div>
             </div>
             <div class="footer__col fc2">
-                <a class="nv--li nv" href="#">Main</a>
-                <a class="nav__link nv" href="contact.html">Contact</a>
-                <a class="nav__link nv" href="authors.html">Authors</a>
-                <a class="nav__link nv" href="tags.html">Tags</a>
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
             <div class="footer__col fc1">
                 <div class="footer__icon">
-                    <a href="#">
+                    <a href="">
                         <div>
                             <img class="footer__iconph" src="../images/icon.png" alt="">
                         </div>
