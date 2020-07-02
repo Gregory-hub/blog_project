@@ -45,17 +45,17 @@ def get_groups(article_set):
     groups = []
     while len(articles) > 1:
         if len(articles) == 4:
-            slice, articles = articles[len(articles)-2:], articles[:len(articles)-2]
+            slice, articles = articles[2:], articles[:2]
             groups.append([random.randint(1, 3), slice])
         if len(articles) == 3:
-            groups.append([random.randint(4, 5), articles])
+            groups.append([4, articles])
             break
         elif len(articles) == 2:
             groups.append([random.randint(1, 3), articles])
             break
 
-        mode = random.randint(1, 5)
-        if 1 <= mode <= 3:
+        mode = random.randint(1, 4)
+        if mode <= 3:
             slice, articles = articles[len(articles)-2:], articles[:len(articles)-2]
             groups.append([mode, slice])
         else:
@@ -87,8 +87,6 @@ def index(request):
     if len(articles) > 1:
         article1 = articles[0]
         articles = Article.objects.exclude(name=article1.name, author=article1.author)
-        print(article1)
-        print(articles)
         groups = get_groups(articles)
     elif len(articles) == 1:
         article1, articles = articles[0], []
