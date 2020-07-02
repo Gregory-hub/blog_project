@@ -43,6 +43,9 @@
         <div class="contact__title">
             <div class="contact__title--text">Welcome Back</div>
         </div>
+        <div class="show">
+            <div class="show__word">{{ message }}</div>
+        </div>
 
         <form class="box" action="{% url 'blog:login' %}" method="post">
             {% csrf_token %}

@@ -419,7 +419,7 @@ def sign_up(request):
 
                 return HttpResponseRedirect(reverse('blog:my_page'))
             else:
-                context['message'] = "This name is unavailable"
+                context['message'] = "This name is occupied"
                 return render(request, template, context)
 
         else:

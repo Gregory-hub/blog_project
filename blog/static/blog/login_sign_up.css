@@ -177,6 +177,13 @@ h1,h2,h3,h4,h5,h6{
     font-size: 15px;
     margin-left: 5px;
 }
+/*Show
+==============*/
+.show__word{
+    text-align: center;
+    font-size: 20px;
+    color:red;
+}
 
 /*Media
 =============*/

@@ -43,8 +43,9 @@
         <div class="contact__title">
             <div class="contact__title--text">Sign up</div>
         </div>
-
-        {{ message }}
+        <div class="show">
+            <div class="show__word">{{ message }}</div>
+        </div>
 
         <form class="box" action="{% url 'blog:sign_up' %}" method="post">
             {% csrf_token %}
