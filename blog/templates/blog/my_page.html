@@ -6,6 +6,7 @@
     <meta name="google" content="notranslate" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% load static %}
+    {% load get_datetime %}
     <link rel="stylesheet" href="{% static 'blog/writer.css' %}">
 </head>
 <body>
@@ -117,34 +118,32 @@
 <div class="blogs">
     <div class="container">
         <div class="blog">
-            <div class="blogs__title">My articles</div>
-            <div class="blogs__list">
+            <div class="blogs__title">Blogs</div>
 
-                {% if articles|length > 0 %}
-                    {% for article in articles %}
+            {% if articles|length > 0 %}
+                {% for article in articles %}
 
-                            <div class="blogs__item1 bi14">
-                                <article>
-                                    <a class="blogs__fon"  href="{% url 'blog:article' article.author.name article.name %}">
-                                        <img src="{{ article.image.url }}" class="blogs__img">
-                                        <div class="blogs__content">
-                                            <a class="blogs__texting" href="{% url 'blog:article' article.author.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
-                                            <div class="blogs__auth">
-                                                <span class="blogs__s">by </span>
-                                                <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
-                                                <span class="blogs__s"> on {{ article.pub_date }}</span>
-                                            </div>
-                                            <div class="blogs__btn">
-                                                <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
-                                            </div>
+                        <div class="blogs__item1 bi14">
+                            <article>
+                                <a class="blogs__fon"  href="{% url 'blog:article' article.author.name article.name %}">
+                                    <img src="{{ article.image.url }}" class="blogs__img">
+                                    <div class="blogs__content">
+                                        <a class="blogs__texting" href="{% url 'blog:article' article.author.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <div class="blogs__auth">
+                                            <span class="blogs__s">by </span>
+                                            <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
+                                            <span class="blogs__s"> {% get_datetime article.pub_date %}</span>
                                         </div>
-                                    </a>
-                                </article>
-                            </div>
+                                        <div class="blogs__btn">
+                                            <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        </div>
 
-                    {% endfor %}
-                {% endif %}
-            </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

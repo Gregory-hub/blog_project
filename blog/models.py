@@ -4,7 +4,7 @@ from django.db.models import *
 class Article(Model):
     author = ForeignKey('Writer', on_delete=CASCADE)
     name = CharField(max_length=70)
-    text = CharField(max_length=10000)
+    text = CharField(max_length=100000)
     image = ImageField(upload_to='media/articles/images')
     tag = ForeignKey('Tag', on_delete=CASCADE, null=True)
     pub_date = DateTimeField()

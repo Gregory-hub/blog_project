@@ -91,12 +91,10 @@ def index(request):
         article1 = None
         groups = []
 
-    print(*groups, sep='\n')
 
     context = {
         'article1': article1,
         'groups': groups,
-        'authenticated': request.user.is_authenticated
     }
     return render(request, template, context)
 
@@ -107,8 +105,9 @@ def article(request, writer_name, article_name):
     writer = get_object_or_404(Writer, name=writer_name)
     article = get_object_or_404(Article, name=article_name)
 
-    if writer.article_set.exclude(name=article.name).exists():
-        recommended_article = writer.article_set.exclude(name=article.name).order_by('-pub_date')[0]
+    article_set = writer.article_set.exclude(name=article.name)
+    if article_set.exists():
+        recommended_article = article_set.order_by('-pub_date')[0]
     else:
         recommended_article = None
 
@@ -119,9 +118,8 @@ def article(request, writer_name, article_name):
         'recommended_article': recommended_article,
         'comments': article.comment_set.order_by('-comment_date'),
         'message': '',
-        'authenticated': request.user.is_authenticated,
     }
-    if not context['authenticated']:
+    if not request.user.is_authenticated:
         context['message'] = 'You cannot comment. Login to unlock this privelegy'
 
 
@@ -168,7 +166,6 @@ def writer(request, writer_name):
         'message': message,
         'writer': writer,
         'articles': articles,
-        'authenticated': authenticated,
     }
     return render(request, template, context)
 

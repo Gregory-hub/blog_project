@@ -7,6 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
+    {% load get_datetime %}
     <link rel="stylesheet" href="{% static 'blog/writer.css' %}">
     <script src=" {% static 'blog/js/writer.js' %}"></script>
 </head>
@@ -31,7 +32,7 @@
                     <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
-                    {% if authenticated %}
+                    {% if request.user.is_authenticated %}
                         <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
                     {% else %}
                         <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
@@ -92,7 +93,7 @@
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
                                             <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
-                                            <span class="blogs__s"> on {{ article.pub_date }}</span>
+                                            <span class="blogs__s"> {% get_datetime article.pub_date %}</span>
                                         </div>
                                         <div class="blogs__btn">
                                             <a class="blogs__btn--btn" href="{% url 'blog:tag' article.tag.name %}">{{ article.tag.name }}</a>
