@@ -46,8 +46,8 @@ class SignUpForm(forms.Form):
 
 
 class LogInForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'username', 'autocomplete': 'off'}), max_length=50)
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'password', 'autocomplete': 'off'}), max_length=50)
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Your username', 'autocomplete': 'off'}), max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Your password', 'autocomplete': 'off'}), max_length=50)
 
 
 class DeleteButton(forms.Form):

@@ -27,10 +27,10 @@ def get_groups(article_set):
     # get latest articles(max: 40)
     if len(article_set) == 0:
         return []
-    if Article.objects.count() > 40:
-        articles_old = article_set.order_by('-pub_date')[random.randint(20, 40)]
+    if len(article_set) > 40:
+        articles_old = list(article_set.order_by('-pub_date')[random.randint(20, 40)])
     else:
-        articles_old = list(Article.objects.order_by('-pub_date'))
+        articles_old = list(article_set.order_by('-pub_date'))
 
     # order articles by num of comments
     comments_nums = []
@@ -83,14 +83,18 @@ def render_empty_form(request, form, template, message=''):
 def index(request):
     template = 'blog/blog_index.html'
 
-    articles = list(Article.objects.all())
-    if len(articles) > 0:
-        article1 = articles.pop(0)
+    articles = Article.objects.order_by('-pub_date')
+    if len(articles) > 1:
+        article1 = articles[0]
+        articles = Article.objects.exclude(name=article1.name, author=article1.author)
+        print(article1)
+        print(articles)
         groups = get_groups(articles)
+    elif len(articles) == 1:
+        article1, articles = articles[0], []
     else:
         article1 = None
         groups = []
-
 
     context = {
         'article1': article1,
@@ -354,9 +358,14 @@ def log_in(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('blog:index'))
 
+    form = LogInForm()
+    context = {
+        'form': form,
+        'message': '',
+    }
+
     if request.method == 'GET':
-        form = LogInForm()
-        return render_empty_form(request, form, template)
+        return render(request, template, context)
 
     elif request.method == 'POST':
         form = LogInForm(request.POST)
@@ -370,19 +379,26 @@ def log_in(request):
                 return HttpResponseRedirect(reverse('blog:index'))
             else:
                 if list(User.objects.filter(username=username)) == []:
-                    return render_empty_form(request, form, template, 'User does not exist')
+                    context['message'] = 'User does not exist'
+                    return render(request, template, context)
                 else:
-                    return render_empty_form(request, form, template, 'Wrong password')
+                    context['message'] = 'Wrong password'
+                    return render(request, template, context)
         else:
-            return render_empty_form(request, form, template, 'Form is invalid')
+            context['message'] = 'Form is invalid'
 
 
 def sign_up(request):
     template = 'blog/sign_up.html'
 
+    form = SignUpForm()
+    context = {
+        'form': form,
+        'message': ''
+    }
+
     if request.method == 'GET':
-        form = SignUpForm()
-        return render_empty_form(request, form, template)
+        return render(request, template, context)
 
     elif request.method == 'POST':
         if request.user.is_authenticated:
@@ -395,21 +411,23 @@ def sign_up(request):
 
             if list(User.objects.filter(username=username)) == []:
                 User.objects.create_user(username=username, password=password)
-                Writer.objects.create(name=username)
+                writer = Writer.objects.create(name=username, age=0)
 
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
 
-                return HttpResponseRedirect(reverse('blog:index'))
+                return HttpResponseRedirect(reverse('blog:my_page'))
             else:
-                return render_empty_form(request, form, template, "This username is not available")
+                context['message'] = "This name is unavailable"
+                return render(request, template, context)
 
         else:
-            return render_empty_form(request, form, template, 'Form is invalid')
+            context['message'] = 'Form is invalid'
+            return render(request, template, context)
 
 
-def logout(request):
+def log_out(request):
     if request.user.is_authenticated:
         logout(request)
 

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
     <meta name="google" content="notranslate" />
-    <link rel="stylesheet" href="../css/login_sign_in.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/login_sign_up.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
- <svg style="display: none;">
+<svg style="display: none;">
    <symbol id="next" viewBox="0 0 492.004 492.004" >
             <g>
                 <path d="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
@@ -29,7 +30,7 @@
 
     <div class="contact__left">
         <div class="contact__back">
-            <a class="contact__link" href="blog_index.html">
+            <a class="contact__link" href="{% url 'blog:index' %}">
                 <div class="contact__button">
                    <svg class="intro__nexting">
                         <use xlink:href="#next"> </use>
@@ -43,20 +44,19 @@
             <div class="contact__title--text">Sign up</div>
         </div>
 
-        <form class="box" action="index.html" method="post">
+        {{ message }}
 
-            <input type="text" name="" placeholder="Your name">
-            <input type="email" name="" placeholder="Your email address">
-            <input type="password" name="" placeholder="Your password">
-
-            <input type="submit" name="" value="Sign in">
-
+        <form class="box" action="{% url 'blog:sign_up' %}" method="post">
+            {% csrf_token %}
+            {{ form.username }}
+            {{ form.password }}
+            <input type="submit" value="Sign up">
         </form>
 
         <div class="down">
             <div class="down__content">
                 <div class="down__text">Already have an account?</div>
-                <a class="down__link" href="sign_in.html">Sign in</a>
+                <a class="down__link" href="{% url 'blog:login' %}">Sign in</a>
             </div>
         </div>
     </div>
