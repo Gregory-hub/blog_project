@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
     <meta name="google" content="notranslate" />
-    <link rel="stylesheet" href="../css/tags.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/tags.css' %}">
 </head>
 <body>
 
@@ -16,31 +17,35 @@
     </svg>
 
 
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
 
-            <div class="header__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                <div class="header__logo">
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+
+                <nav class="nav">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nv--li" href="{% url 'blog:tags' %}">Tags</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                    {% else %}
+                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                    {% endif %}
+                         <svg class="nav__photosearch">
+                            <use xlink:href="#search"></use>
+                        </svg>
+                    </a>
+                </nav>
+                <button class="burger" type="button" id="navToggle" >
+                    <span class="burger__item">Menu</span>
+                </button>
             </div>
-
-            <nav class="nav">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class="nav__link" href="authors.html">Authors</a>
-                <a class="nv--li" href="#">Tags</a>
-                <a class="nav__link--sign" href="sign_in.html">Sign in</a>
-                <a class="nav__link--sign" href="sign_up.html">Sign up</a>
-                <a class="nav__link--sign" href="add.html">Your page</a>
-                <a class="nav__photo" href="#">
-                    <svg class="nav__photosearch">
-                        <use xlink:href="#search"> </use>
-                    </svg>
-                </a>
-            </nav>
         </div>
-    </div>
-</header>
+    </header>
 
 <div class="fixword">
     <div class="fixword__text">

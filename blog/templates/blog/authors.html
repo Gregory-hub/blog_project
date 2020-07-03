@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
      <meta name="google" content="notranslate" />
-     <link rel="stylesheet" href="../css/authors.css">
+     {% load static %}
+     <link rel="stylesheet" href="{% static 'blog/authors.css' %}">
 </head>
 <body>
 <svg style="display: none;">
@@ -21,31 +22,36 @@
             </g>
         </symbol>
     </svg>
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
 
-            <div class="header__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                <div class="header__logo">
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+
+                <nav class="nav">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nv--li" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                    {% else %}
+                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                    {% endif %}
+                         <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
+                </nav>
+                <button class="burger" type="button" id="navToggle" >
+                    <span class="burger__item">Menu</span>
+                </button>
             </div>
-
-            <nav class="nav">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class=" nv--li" href="#">Authors</a>
-                <a class="nav__link" href="tags.html">Tags</a>
-                <a class="nav__link--sign" href="sign_in.html">Sign in</a>
-                <a class="nav__link--sign" href="sign_up.html">Sign up</a>
-                <a class="nav__link--sign" href="add.html">Your page</a>
-                <a class="nav__photo" href="#">
-                    <svg class="nav__photosearch">
-                        <use xlink:href="#search"> </use>
-                    </svg>
-                </a>
-            </nav>
         </div>
-    </div>
-</header>
+    </header>
+
 
 <div class="fixword">
     <div class="fixword__text">
@@ -63,99 +69,25 @@
 <div class="auth">
     <div class="container">
         <div class="authors">
+
+            {% for writer in writers %}
+
             <div class="auth__item1">
-                <a class="auth__link" href="author.html">
+                <a class="auth__link" href="{% url 'blog:writer' writer.name %}">
                     <div class="auth__photo">
-                        <img class="auth__img" src="https://placehold.it/500x250">
+                        <img class="auth__img" src="{{ writer.image.url }}">
                     </div>
                     <div class="auth__content">
-                        <div class="auth__name">Bogdankov Nikita</div>
+                        <div class="auth__name">{{ writer.name }}</div>
                         <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Haec doca illi, nos admirabilia dicamus. Universa enim illorum ratione cum tota vestra confligendum puto.</div>
+                            <div class="social__text">{{ writer.bio }}</div>
                         </div>
                     </div>
                 </a>
             </div>
 
+            {% endfor %}
 
-            <div class="auth__item1">
-                <a class="auth__link" href="">
-                    <div class="auth__contenting ac1">
-                        <div class="auth__name">Bogdankov Nikita</div>
-                        <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Nec vero pietas adversus deos nec quanta is gratia debeatur sine explicatione naturae intellegi potest. Dic in quovis conventu te omnia facere, ne doleas.</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="auth__item1">
-                <a class="auth__link" href="#">
-                    <div class="auth__photo">
-                        <img class="auth__img" src="https://placehold.it/500x250">
-                    </div>
-                    <div class="auth__content">
-                        <div class="auth__name">Grigory Novikov</div>
-                        <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Dici enim nihil potest verius. Sed ne, dum huic obsequor, vobis molestus sim. Iam id ipsum absurdum, maximum malum neglegi. Tecum optime, deinde etiam cum mediocri amico.</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="auth__item1">
-                <a class="auth__link" href="">
-                    <div class="auth__contenting ac2">
-                        <div class="auth__name">Bogdankov Nikita</div>
-                        <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Nec vero pietas adversus deos nec quanta is gratia debeatur sine explicatione naturae intellegi potest. Dic in quovis conventu te omnia facere, ne doleas.</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="auth__item1">
-                <a class="auth__link" href="#">
-                    <div class="auth__photo">
-                        <img class="auth__img" src="https://placehold.it/500x250">
-                    </div>
-                    <div class="auth__content">
-                        <div class="auth__name">Bogdankov Nikita</div>
-                        <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Respondeat totidem verbis. Utinam quidem dicerent alium alio beatiorem, Iam ruinas videres. Quamquam ab iis philosophiam et omnes ingenuas disciplinas habemus.</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-             <div class="auth__item1">
-                <a class="auth__link" href="">
-                    <div class="auth__contenting ac3">
-                        <div class="auth__name">Grigory Novikov</div>
-                        <div class="auth__social">
-                            <div class="social__item">
-                                <img class="social__photo" src="../images/icon.png" alt="">
-                            </div>
-                            <div class="social__text">Non dolere, inquam, istud quam vim habeat postea viderouid ei reliquisti, nisi te, quoquo modo loqueretur, intellegere, quid diceret.</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </div>
@@ -165,23 +97,13 @@
         <div class="footer__footer">
             <div class="footer__col">
                 <div class="footer__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
             </div>
             <div class="footer__col">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class="nv--li" href="#">Authors</a>
-                <a class="nav__link" href="tags.html">Tags</a>
-            </div>
-            <div class="footer__col">
-                <div class="footer__icon">
-                    <a href="#">
-                        <div>
-                            <img class="footer__iconph" src="../images/icon.png" alt="">
-                        </div>
-                    </a>
-                </div>
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nv--li" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
         </div>
         <div class="copyright">
@@ -194,7 +116,6 @@
         </div>
     </div>
 </footer>
-
 
 </body>
 </html>

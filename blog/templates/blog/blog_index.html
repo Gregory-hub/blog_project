@@ -39,7 +39,7 @@
                 </div>
 
                 <nav class="nav">
-                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nv--li" href="{% url 'blog:index' %}">Main</a>
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
                     {% if request.user.is_authenticated %}
@@ -49,7 +49,7 @@
                         <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                     {% endif %}
                          <svg class="nav__photosearch">
-                            <use xlink:href="#search"> </use>
+                            <use xlink:href="#search"></use>
                         </svg>
                     </a>
                 </nav>
@@ -308,7 +308,7 @@
                 </div>
             </div>
             <div class="footer__col fc2">
-                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nv--li" href="{% url 'blog:index' %}">Main</a>
                 <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                 <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>

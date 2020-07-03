@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
      <meta name="google" content="notranslate" />
-    <link rel="stylesheet" href="../css/tag.css">
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/tag.css' %}">
 </head>
 <body>
 
@@ -50,9 +51,11 @@
     </div>
 </div>
 
+<img src="{{ tag.image.url }}" alt="">
+
 <div class="intro">
     <div class="intro__inner">
-        <div class="intro__title">Journey</div>
+        <div class="intro__title">{{ tag.name }}</div>
         <div class="intro__content">
             <div class="intro__photo">
                 <svg class="intro__post">

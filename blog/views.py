@@ -433,12 +433,48 @@ def log_out(request):
 
 
 def authors(request):
-    return HttpResponse('Ok authors')
+    template = 'blog/authors.html'
+
+    writers_old = list(Writer.objects.all())
+
+    articles_nums = []
+    for writer in writers_old:
+        articles_nums.append(writer.article_set.count())
+
+    writers = []
+    for i in range(len(articles_nums)):
+        writers.append(writers_old.pop(articles_nums.index(max(articles_nums))))
+        articles_nums.pop(articles_nums.index(max(articles_nums)))
+
+    context = {
+        'writers': writers,
+    }
+
+    return render(request, template, context)
 
 
 def tags(request):
-    return HttpResponse('Ok tags')
+    template = 'blog/tags.html'
+
+    tags = Tag.objects.all()
+
+    context = {
+        'tags': tags
+    }
+
+    return render(request, template, context)
 
 
 def tag(request, tag_name):
-    return HttpResponse('Ok tag')
+    template = 'blog/tag.html'
+
+    tag = Tag.objects.get(name=tag_name)
+
+    context = {
+        'tag': tag
+    }
+
+    print('\n' + Writer.objects.get(name='writer').image.url +'\n')
+    print('\n' + tag.image.url + '\n')
+
+    return render(request, template, context)
