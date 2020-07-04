@@ -29,8 +29,8 @@ def get_groups(article_set):
     # order articles by num of comments
     if len(article_set) == 0:
         return []
-    if len(article_set) > 40:
-        articles = article_set.order_by('-pub_date')[random.randint(20, 40)]
+    if len(article_set) > 30:
+        articles = article_set.order_by('-pub_date')[random.randint(10, 30)]
         articles.annotate(num_comments=Count('comment')).order_by('-num_comments')
     else:
         articles = article_set.annotate(num_comments=Count('comment')).order_by('-num_comments')
@@ -281,10 +281,9 @@ def edit(request, article_name):
 
     user = request.user
     if not user.is_authenticated:
-        return HttpResponseRedirect(reverse('blog:index'))
+        return HttpResponse('<h1>401 unauthorized</h1>', status=401)
 
     writer = get_object_or_404(Writer, name=user.username)
-
     article = get_object_or_404(Article, name=article_name, author=writer)
 
     form = EditForm(initial={
@@ -315,24 +314,32 @@ def edit(request, article_name):
                 image = None
             tag = get_object_or_404(Tag, name=tag_name)
 
-            if not writer.article_set.filter(name=name).exists():
-                article.name = name
-                article.text = text
-                article.tag = tag
+            article.name = name
+            article.text = text
+            article.tag = tag
 
-                if image:
-                    article.image = image
+            if image:
+                article.image = image
 
-                article.last_edit=timezone.now()
+            article.last_edit=timezone.now()
 
-                article.save()
-                return HttpResponseRedirect(reverse('blog:my_article', args=(article.name, )))
-            else:
-                context['message'] = 'This name is not available'
-                return render(request, template, context)
+            article.save()
+            return HttpResponseRedirect(reverse('blog:index'))      # my_article', args=(article.name, )))
         else:
             context['message'] = 'Form is invalid'
             return render(request, template, context)
+
+# done
+def delete(request, article_name):
+
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse('<h1>401 unauthorized</h1>', status=401)
+
+    writer = Writer.objects.get(name=user.username)
+    writer.article_set.get(name=article_name).delete()
+
+    return HttpResponseRedirect(reverse('blog:my_page'))
 
 # done
 def log_in(request):

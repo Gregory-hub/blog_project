@@ -65,6 +65,8 @@
         <div class="writer__inner">
             <div class="writer__title">Edit '{{ article.name }}'</div>
 
+            {{ message }}
+
             <form  class="boxl" action="{% url 'blog:edit' article.name %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.image }}
@@ -93,19 +95,9 @@
                 </div>
             </div>
             <div class="footer__col fc2">
-                <a class="nav__link nv" href="blog_index.html">Main</a>
-                <a class="nav__link nv" href="contact.html">Contact</a>
-                <a class="nav__link nv" href="authors.html">Authors</a>
-                <a class="nav__link nv" href="tags.html">Tags</a>
-            </div>
-            <div class="footer__col fc3">
-                <div class="footer__icon">
-                    <a href="#">
-                        <div>
-                            <img class="footer__iconph" src="../images/icon.png" alt="">
-                        </div>
-                    </a>
-                </div>
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
         </div>
         <div class="copyright">
