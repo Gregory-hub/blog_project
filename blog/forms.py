@@ -50,17 +50,11 @@ class LogInForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Your password', 'autocomplete': 'off'}), max_length=50)
 
 
-class DeleteButton(forms.Form):
-    value = forms.CharField(widget=forms.HiddenInput(attrs={'value': 'delete'}), max_length=6)
-
-
-class EditButton(forms.Form):
-    value = forms.CharField(widget=forms.HiddenInput(attrs={'value': 'edit'}), max_length=4)
-
-
 class EditForm(forms.Form):
-    name = forms.CharField(required=False, label="Edit name", max_length=70)
-    text = forms.CharField(required=False, label="Edit text")
+    name = forms.CharField(widget=forms.TextInput(attrs={'id': 'title', 'placeholder': 'Title', 'autocomplete': 'off'}), max_length=70)
+    text = forms.CharField(widget=forms.Textarea(attrs={'id': 'art', 'class': 'textareacl', 'placeholder': 'Text' ,'autocomplete': 'off'}))
+    tag = forms.ChoiceField(widget=forms.RadioSelect(), choices=get_choices())
+    image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'avatarfile', 'name': 'avatarfile'}), required=False)
 
 
 class CommentForm(forms.Form):

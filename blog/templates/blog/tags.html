@@ -9,7 +9,7 @@
 </head>
 <body>
 
- <svg style="display: none;">
+    <svg style="display: none;">
         <symbol id="search" viewBox="0 0 24 24">
             <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
             </g>
@@ -53,47 +53,85 @@
     </div>
 </div>
 
+<!-- top tags -->
+
 <div class="text ts" >
     <div class="container">
         <div class="text__text">Our top tags</div>
     </div>
 </div>
 
-
 <div class="tag">
     <div class="container">
         <div class="tags">
 
+            {% if top_tags %}
+                {% if top_tags|length == 1 %}
 
-            <div class="tag__item1 ti1">
-                   <a class="tag__link" href="#">
-                    <div class="tag__content">
-                        <div class="tag__title">Story</div>
-                        <div class="tag__text">Enean malesuada imperdiet orci nec euismod. Vivamus posuere sapien ac congue posuere. Sed ut mattis massa. Interdum et malesuada fames ac ante ipsum primis in faucibus.</div>
+                    <div class="tag__item2 ti21">
+                        <a class="tag__link" href="{% url 'blog:tag' top_tags.0.name %}">
+                           <img src="{{ top_tags.0.image.url }}" alt="" class="item__img">
+                            <div class="tag__content">
+                                <div class="tt1">{{ top_tags.0.name }}</div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
 
-            <div class="tag__item1 ti2">
-                <a class="tag__link" href="#">
-                    <div class="tag__content">
-                        <div class="tag__title">People</div>
-                        <div class="tag__text">Ut lectus risus, accumsan nec neque non, malesuada hendrerit arcu. In nec feugiat purus, eu finibus diam.</div>
+                {% elif top_tags|length == 2 %}
+
+                    <div class="tag__item1 ti1">
+                           <a class="tag__link" href="{% url 'blog:tag' top_tags.0.name %}">
+                           <img src="{{ top_tags.0.image.url }}" alt="" class="item__img">
+                            <div class="tag__content">
+                                <div class="tag__title">{{ top_tags.0.name }}</div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
 
-            <div class="tag__item2 ti21">
-                <a class="tag__link" href="tag.html">
-                    <div class="tag__content">
-                        <div class="tt1">Journey</div>
-
+                    <div class="tag__item1 ti2">
+                        <a class="tag__link" href="{% url 'blog:tag' top_tags.1.name %}">
+                            <img src="{{ top_tags.1.image.url }}" alt="" class="item__img">
+                             <div class="tag__content">
+                                 <div class="tag__title">{{ top_tags.1.name }}</div>
+                             </div>
+                         </a>
                     </div>
-                </a>
-            </div>
+
+                {% else %}
+
+                    <div class="tag__item1 ti1">
+                           <a class="tag__link" href="{% url 'blog:tag' top_tags.0.name %}">
+                           <img src="{{ top_tags.0.image.url }}" alt="" class="item__img">
+                            <div class="tag__content">
+                                <div class="tag__title">{{ top_tags.0.name }}</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="tag__item1 ti2">
+                        <a class="tag__link" href="{% url 'blog:tag' top_tags.1.name %}">
+                            <img src="{{ top_tags.1.image.url }}" alt="" class="item__img">
+                             <div class="tag__content">
+                                 <div class="tag__title">{{ top_tags.1.name }}</div>
+                             </div>
+                         </a>
+                    </div>
+
+                    <div class="tag__item2 ti21">
+                        <a class="tag__link" href="{% url 'blog:tag' top_tags.0.name %}">
+                           <img src="{{ top_tags.0.image.url }}" alt="" class="item__img">
+                            <div class="tag__content">
+                                <div class="tt1">{{ top_tags.0.name }}</div>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
+
+<!-- tags -->
 
 <div class="text ts2" >
    <div class="container">
@@ -103,13 +141,13 @@
     </div>
 </div>
 
-
 <div class="tag2 tag">
     <div class="container">
         <div class="tags2">
 
             <div class="tags__item tsi1">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/company.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Education</div>
                     </div>
@@ -117,7 +155,8 @@
             </div>
 
             <div class="tags__item tsi2">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/stairs.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Architecture</div>
                     </div>
@@ -125,7 +164,8 @@
             </div>
 
             <div class="tags__item tsi3">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/breakfast.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Lifestyle</div>
                     </div>
@@ -133,7 +173,8 @@
             </div>
 
             <div class="tags__item tsi4">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/forest.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Nature</div>
                     </div>
@@ -141,7 +182,8 @@
             </div>
 
             <div class="tags__item tsi5">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/artgallery.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Culture</div>
                     </div>
@@ -149,7 +191,8 @@
             </div>
 
             <div class="tags__item tsi6">
-                <a class="tag__link" href="#">
+                <a class="tag__link" href="tag.html">
+                   <img src="{% static 'blog/images/design.jpg' %}" alt="" class="item__img">
                     <div class="tags__content">
                         <div class="tags__title">Design</div>
                     </div>
@@ -164,23 +207,13 @@
         <div class="footer__footer">
             <div class="footer__col">
                 <div class="footer__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
             </div>
             <div class="footer__col">
-                <a class="nav__link" href="blog_index.html">Main</a>
-                <a class="nav__link" href="contact.html">Contact</a>
-                <a class="nav__link" href="authors.html">Authors</a>
-                <a class="nv--li" href="#">Tags</a>
-            </div>
-            <div class="footer__col">
-                <div class="footer__icon">
-                    <a href="#">
-                        <div>
-                            <img class="footer__iconph" src="../images/icon.png" alt="">
-                        </div>
-                    </a>
-                </div>
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nv--li" href="">Tags</a>
             </div>
         </div>
         <div class="copyright">

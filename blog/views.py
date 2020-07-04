@@ -13,8 +13,9 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage
 from django.core.files.storage import default_storage
+from django.db.models import Count
 
-from .models import Article, Writer
+from .models import *
 from .forms import *
 
 
@@ -25,21 +26,15 @@ def get_groups(article_set):
     mode is mode to display articles in browser
     """
     # get latest articles(max: 40)
+    # order articles by num of comments
     if len(article_set) == 0:
         return []
     if len(article_set) > 40:
-        articles_old = list(article_set.order_by('-pub_date')[random.randint(20, 40)])
+        articles = article_set.order_by('-pub_date')[random.randint(20, 40)]
+        articles.annotate(num_comments=Count('comment')).order_by('-num_comments')
     else:
-        articles_old = list(article_set.order_by('-pub_date'))
+        articles = article_set.annotate(num_comments=Count('comment')).order_by('-num_comments')
 
-    # order articles by num of comments
-    comments_nums = []
-    for article in articles_old:
-        comments_nums.append(article.comment_set.count())
-
-    articles = []
-    for i in range(len(comments_nums)):
-        articles.append(articles_old.pop(max(comments_nums)))
 
     # group articles
     groups = []
@@ -79,7 +74,7 @@ def render_empty_form(request, form, template, message=''):
     }
     return render(request, template, context)
 
-
+# done
 def index(request):
     template = 'blog/blog_index.html'
 
@@ -100,7 +95,7 @@ def index(request):
     }
     return render(request, template, context)
 
-
+# done
 def article(request, writer_name, article_name):
     template = 'blog/article.html'
 
@@ -151,7 +146,7 @@ def article(request, writer_name, article_name):
             context['message'] = 'Form is invalid'
             return render(request, template, context)
 
-
+# done
 def writer(request, writer_name):
     template = 'blog/writer.html'
 
@@ -171,7 +166,7 @@ def writer(request, writer_name):
     }
     return render(request, template, context)
 
-
+# done
 def my_page(request):
     template = 'blog/my_page.html'
 
@@ -227,7 +222,7 @@ def my_page(request):
 
                 name = add_form.cleaned_data['name']
                 text = add_form.cleaned_data['text']
-                tag = Tag.objects.get(name=tag_name)
+                tag = get_object_or_404(Tag, name=tag_name)
                 writer = Writer.objects.get(name=request.user.username)
 
                 imagename = upload_file('media/articles/images/', request.FILES['image'])
@@ -264,46 +259,23 @@ def my_page(request):
                 context['message'] = 'Form is invalid'
                 return render(request, template, context)
 
-
+# test
 def my_article(request, article_name):
     template = 'blog/my_article.html'
 
     if not request.user.is_authenticated:
         return HttpResponse('<h1>401 unauthorized</h1>', status=401)
 
-    if request.method == 'GET':
-        writer = get_object_or_404(Writer, name=request.user.username)
-        article = writer.article_set.get(name=article_name)
+    writer = get_object_or_404(Writer, name=request.user.username)
+    article = writer.article_set.get(name=article_name)
+    context = {
+        'article': article,
+        'comments': article.comment_set.order_by('-comment_date'),
+    }
 
-        context = {
-            'article': article,
-            'comments': Comment.objects.filter(article=article),
-            'form1': DeleteButton,
-            'form2': EditButton,
-        }
-        return render(request, template, context)
+    return render(request, template, context)
 
-    elif request.method == 'POST':
-        writer = get_object_or_404(Writer, name=request.user.username)
-        article = writer.article_set.get(name=article_name)
-
-        if request.POST['value'] == 'delete':
-            form = DeleteButton(request.POST)
-            if form.is_valid:
-                article.delete()
-            else:
-                return HttpResponseRedirect(reverse('blog:my_article', args=(article_name, )))
-
-        elif request.POST['value'] == 'edit':
-            form = EditButton(request.POST)
-            if form.is_valid:
-                return HttpResponseRedirect(reverse('blog:edit', args=(article_name, )))
-            else:
-                return HttpResponseRedirect(reverse('blog:my_article', args=(article_name, )))
-
-        return HttpResponseRedirect(reverse('blog:my_page'))
-
-
+# test
 def edit(request, article_name):
     template = 'blog/edit.html'
 
@@ -311,46 +283,58 @@ def edit(request, article_name):
     if not user.is_authenticated:
         return HttpResponseRedirect(reverse('blog:index'))
 
+    writer = get_object_or_404(Writer, name=user.username)
+
+    article = get_object_or_404(Article, name=article_name, author=writer)
+
+    form = EditForm(initial={
+        'name': article.name,
+        'text': article.text,
+        'tag': article.tag,
+    })
+
+    context = {
+        'article': article,
+        'message': '',
+        'form': form,
+    }
+
     if request.method == 'GET':
-        context = {
-            'article_name': article_name,
-            'message': '',
-            'form': EditForm(),
-        }
         return render(request, template, context)
 
     elif request.method == 'POST':
-        form = EditForm(request.POST)
+        form = EditForm(request.POST, request.FILES)
         if form.is_valid():
+            tag_name = form.cleaned_data['tag']
+
             name = form.cleaned_data['name']
             text = form.cleaned_data['text']
-            writer = Writer.objects.get(name=user.username)
+            if 'image' in request.FILES:
+                image = request.FILES['image']
+            else:
+                image = None
+            tag = get_object_or_404(Tag, name=tag_name)
 
-            if list(writer.article_set.filter(name=name)) == []:
-                article = writer.article_set.get(name=article_name)
-                if name != '':
-                    article.name = name
-                if text != '':
-                    article.text = text
+            if not writer.article_set.filter(name=name).exists():
+                article.name = name
+                article.text = text
+                article.tag = tag
+
+                if image:
+                    article.image = image
+
                 article.last_edit=timezone.now()
+
                 article.save()
                 return HttpResponseRedirect(reverse('blog:my_article', args=(article.name, )))
             else:
-                context = {
-                    'article_name': article_name,
-                    'message': 'This name is not available',
-                    'form': EditForm(),
-                }
+                context['message'] = 'This name is not available'
                 return render(request, template, context)
         else:
-            context = {
-                'article_name': article_name,
-                'message': 'Form is invalid',
-                'form': EditForm(),
-            }
+            context['message'] = 'Form is invalid'
             return render(request, template, context)
 
-
+# done
 def log_in(request):
     template = 'blog/login.html'
     if request.user.is_authenticated:
@@ -385,7 +369,7 @@ def log_in(request):
         else:
             context['message'] = 'Form is invalid'
 
-
+# done
 def sign_up(request):
     template = 'blog/sign_up.html'
 
@@ -424,27 +408,18 @@ def sign_up(request):
             context['message'] = 'Form is invalid'
             return render(request, template, context)
 
-
+# done
 def log_out(request):
     if request.user.is_authenticated:
         logout(request)
 
     return HttpResponseRedirect(reverse('blog:index'))
 
-
+# done(-template)
 def authors(request):
     template = 'blog/authors.html'
 
-    writers_old = list(Writer.objects.all())
-
-    articles_nums = []
-    for writer in writers_old:
-        articles_nums.append(writer.article_set.count())
-
-    writers = []
-    for i in range(len(articles_nums)):
-        writers.append(writers_old.pop(articles_nums.index(max(articles_nums))))
-        articles_nums.pop(articles_nums.index(max(articles_nums)))
+    writers = Writer.objects.annotate(num_articles=Count('article')).order_by('-num_articles')
 
     context = {
         'writers': writers,
@@ -452,29 +427,45 @@ def authors(request):
 
     return render(request, template, context)
 
-
+# done(-template)
 def tags(request):
     template = 'blog/tags.html'
 
-    tags = Tag.objects.all()
+    tags = list(Tag.objects.annotate(num_articles=Count('article')).order_by('-num_articles'))
+
+    if len(tags) == 0:
+        tags, top_tags = None, None
+    if 1 <= len(tags) <= 3:
+        top_tags, tags = tags, None
+    else:
+        top_tags, tags = tags[:3], tags[3:]
 
     context = {
-        'tags': tags
+        'tags': tags,
+        'top_tags': top_tags
     }
 
     return render(request, template, context)
 
-
+# done(template problem)
 def tag(request, tag_name):
     template = 'blog/tag.html'
 
     tag = Tag.objects.get(name=tag_name)
+    articles = tag.article_set.order_by('-pub_date')
+    if len(articles) > 0 and len(articles) % 2 == 1:
+        last_article = articles.last()
+        print(type(articles))
+        print(last_article)
+        articles = articles.exclude(name=last_article.name)
+        print(articles.filter(name=last_article.name).exists())
+    else:
+        last_article = None
 
     context = {
-        'tag': tag
+        'tag': tag,
+        'articles': articles,
+        'last_article': last_article
     }
-
-    print('\n' + Writer.objects.get(name='writer').image.url +'\n')
-    print('\n' + tag.image.url + '\n')
 
     return render(request, template, context)
