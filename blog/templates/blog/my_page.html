@@ -18,23 +18,28 @@
         </symbol>
     </svg>
 
-<header class="header">
-    <div class="container">
-        <div class="header__inner">
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
 
-            <div class="header__logo">
-                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                <div class="header__logo">
+                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                </div>
+
+                <nav class="nav">
+                    <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                    <a class="nav__link--sign" href="{% url 'blog:logout' %}">Logout</a>
+                    <a class="nav__photo" href="">
+                        <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
+                </nav>
             </div>
-
-            <nav class="nav">
-                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
-                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
-                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
-                <a class="nav__link--sign" href="{% url 'blog:logout' %}">Logout</a>
-            </nav>
         </div>
-    </div>
-</header>
+    </header>
 
 <div class="fixword">
     <div class="fixword__text">
@@ -125,10 +130,10 @@
 
                         <div class="blogs__item1 bi14">
                             <article>
-                                <a class="blogs__fon"  href="{% url 'blog:article' article.author.name article.name %}">
+                                <a class="blogs__fon"  href="{% url 'blog:my_article' article.name %}">
                                     <img src="{{ article.image.url }}" class="blogs__img">
                                     <div class="blogs__content">
-                                        <a class="blogs__texting" href="{% url 'blog:article' article.author.name article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
+                                        <a class="blogs__texting" href="{% url 'blog:my_article' article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
                                             <a class="blogs__author" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>

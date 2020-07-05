@@ -10,7 +10,7 @@
 </head>
 <body>
 
- <svg style="display: none;">
+<svg style="display: none;">
     <symbol id="search" viewBox="0 0 24 24">
             <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
             </g>
@@ -38,9 +38,11 @@
                     <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
                     <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                 {% endif %}
-                     <svg class="nav__photosearch">
-                        <use xlink:href="#search"></use>
-                    </svg>
+                    <a class="nav__photo" href="">
+                        <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
                 </a>
             </nav>
             <button class="burger" type="button" id="navToggle" >
@@ -58,6 +60,7 @@
 
 <div class="intro">
     <div class="intro__inner">
+        <img src="{{ tag.image.url }}" alt="" class="intro__img">
         <div class="intro__title">{{ tag.name }}</div>
         <div class="intro__content">
             <div class="intro__photo">

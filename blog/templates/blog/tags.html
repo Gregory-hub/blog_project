@@ -35,9 +35,11 @@
                         <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
                         <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                     {% endif %}
-                         <svg class="nav__photosearch">
-                            <use xlink:href="#search"></use>
+                    <a class="nav__photo" href="">
+                        <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
                         </svg>
+                    </a>
                     </a>
                 </nav>
                 <button class="burger" type="button" id="navToggle" >

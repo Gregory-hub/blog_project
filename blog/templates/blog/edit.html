@@ -41,9 +41,11 @@
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
                     <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
-                    <svg class="nav__photosearch">
-                        <use xlink:href="#search"></use>
-                    </svg>
+                    <a class="nav__photo" href="">
+                        <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
                 </nav>
                 <button class="burger" type="button" id="navToggle" >
                     <span class="burger__item">Menu</span>

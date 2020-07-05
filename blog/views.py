@@ -259,7 +259,7 @@ def my_page(request):
                 context['message'] = 'Form is invalid'
                 return render(request, template, context)
 
-# test
+# done
 def my_article(request, article_name):
     template = 'blog/my_article.html'
 
@@ -275,7 +275,7 @@ def my_article(request, article_name):
 
     return render(request, template, context)
 
-# test
+# done
 def edit(request, article_name):
     template = 'blog/edit.html'
 
@@ -422,7 +422,7 @@ def log_out(request):
 
     return HttpResponseRedirect(reverse('blog:index'))
 
-# done(-template)
+# done
 def authors(request):
     template = 'blog/authors.html'
 
@@ -434,7 +434,7 @@ def authors(request):
 
     return render(request, template, context)
 
-# done(-template)
+# done
 def tags(request):
     template = 'blog/tags.html'
 
@@ -454,7 +454,7 @@ def tags(request):
 
     return render(request, template, context)
 
-# done(template problem)
+# done
 def tag(request, tag_name):
     template = 'blog/tag.html'
 
@@ -462,10 +462,7 @@ def tag(request, tag_name):
     articles = tag.article_set.order_by('-pub_date')
     if len(articles) > 0 and len(articles) % 2 == 1:
         last_article = articles.last()
-        print(type(articles))
-        print(last_article)
         articles = articles.exclude(name=last_article.name)
-        print(articles.filter(name=last_article.name).exists())
     else:
         last_article = None
 

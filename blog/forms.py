@@ -9,7 +9,6 @@ def get_choices():
     choices = []
     for tag in tags:
         choices.append((tag, tag.name))
-    print(choices)
     return choices
 
 

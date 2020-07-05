@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Blog BN</title>
-     <meta name="google" content="notranslate" />
-     {% load static %}
-     <link rel="stylesheet" href="{% static 'blog/authors.css' %}">
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% load static %}
+    {% load get_datetime %}
+    <link rel="stylesheet" href="{% static 'blog/article.css' %}">
+    <script src="{% static 'blog/js/my_article.js' %}"></script>
 </head>
 <body>
-<svg style="display: none;">
+    <svg style="display: none;">
         <symbol id="search" viewBox="0 0 24 24">
             <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
             </g>
@@ -22,38 +26,46 @@
             </g>
         </symbol>
     </svg>
+
     <header class="header">
         <div class="container">
             <div class="header__inner">
 
                 <div class="header__logo">
-                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
 
                 <nav class="nav">
                     <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
-                    <a class="nv--li" href="{% url 'blog:authors' %}">Authors</a>
+                    <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
-                    {% if request.user.is_authenticated %}
-                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
-                    {% else %}
-                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
-                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
-                    {% endif %}
+                    <a class="nav__link--sign" href="{% url 'blog:my_page' %}">My page</a>
                     <a class="nav__photo" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
                     </a>
-                    </a>
                 </nav>
-                <button class="burger" type="button" id="navToggle" >
-                    <span class="burger__item">Menu</span>
-                </button>
             </div>
         </div>
     </header>
 
+<div class="intro">
+    <div class="intro__inner">
+        <div class="container2">
+            <div class="intro__btn">
+                <a href="{% url 'blog:tag' article.tag.name %}" class="intro__btn--text">{{ article.tag.name }}</a>
+            </div>
+            <div class="intro__title">{{ article.name }}</div>
+            <div class="intro__subtitle">
+                <div class="intro__author">
+                    <span class="intro__s" >by </span><a class="intro__auth" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
+                    <span class="intro__s" > {% get_datetime article.pub_date %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="fixword">
     <div class="fixword__text">
@@ -63,35 +75,17 @@
 
 <div class="text">
     <div class="container">
-        <div class="text__text">Our top authors</div>
+        <div class="text__content">
+            <div class="container2">
+                {{ article.text }}
+            </div>
+        </div>
     </div>
 </div>
 
-
-<div class="auth">
-    <div class="container">
-        <div class="authors">
-
-            {% for writer in writers %}
-
-            <div class="auth__item1">
-                <a class="auth__link" href="{% url 'blog:writer' writer.name %}">
-                    <div class="auth__photo">
-                        <img class="auth__img" src="{{ writer.image.url }}">
-                    </div>
-                    <div class="auth__content">
-                        <div class="auth__name">{{ writer.name }}</div>
-                        <div class="auth__social">
-                            <div class="social__text">{{ writer.bio }}</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            {% endfor %}
-
-        </div>
-    </div>
+<div class="button__spec">
+    <button class="nav__link--sign specbtn" id="show">delete article</button><br>
+    <button class="nav__link--sign specbtn" id="shown">edit article</button>
 </div>
 
 <footer class="footer">
@@ -104,7 +98,7 @@
             </div>
             <div class="footer__col">
                 <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
-                <a class="nv--li" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                 <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
         </div>
@@ -119,5 +113,7 @@
     </div>
 </footer>
 
+
+<script src="{% static 'blog/js/my_article.js' %}"></script>
 </body>
 </html>

@@ -293,11 +293,13 @@ h1,h2,h3,h4,h5,h6{
 
 
 .social__text{
+    height: 200px;
     padding: 30px;
     font-size: 16px;
     font-weight: 400;
     color:#fff;
     text-decoration: none;
+    overflow: hidden;
 }
 
 /*Footer

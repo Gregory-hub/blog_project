@@ -10,6 +10,21 @@
 </head>
 <body>
 
+    <svg style="display: none;">
+        <symbol id="search" viewBox="0 0 24 24">
+            <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
+            </g>
+        </symbol>
+        <symbol id="next" viewBox="0 0 492.004 492.004" >
+            <g>
+                <path d="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
+                c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
+                c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
+                c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"/>
+            </g>
+        </symbol>
+    </svg>
+
     <header class="header">
         <div class="container">
             <div class="header__inner">
@@ -28,6 +43,11 @@
                         <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
                         <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                     {% endif %}
+                    <a class="nav__photo" href="">
+                        <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -86,10 +106,11 @@
         </div>
     </div>
 
+    {% if recommended_article %}
     <div class="olderpost">
         <div class="container">
             <div class="olderpost__inner">
-                <a class="olderpost__link" href="{% url 'blog:article' article.author.name recommended_article.name %}">
+                <a class="olderpost__link" href="{% url 'blog:article' recommended_article.author.name recommended_article.name %}">
                     <div class="olderpost__post">
                         <div class="olderpost__text">older post</div>
                         <div class="olderpost__title">{{ recommended_article.name }}</div>
@@ -98,6 +119,7 @@
            </div>
         </div>
     </div>
+    {% endif %}
 
 
     <div class="reviews">

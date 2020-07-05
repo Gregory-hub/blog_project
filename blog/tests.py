@@ -8,28 +8,50 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout, get_user
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 
 from .models import *
 
 
-def create_writer(name):
-    writer = Writer.objects.create(name=name)
+def create_writer(name, age, image=None, bio=None):
+
+    writer = Writer.objects.create(
+        name = name,
+        age = age,
+    )
+    if image:
+        writer.image = image
+    if bio:
+        writer.bio = bio
+    writer.save()
+
     return writer
 
 
-def create_article(writer, name, text, tag=None):
+def create_article(writer, name, text, image, tag):
     article = writer.article_set.create(
-        name=name,
-        text=text,
-        pub_date=timezone.now(),
-        last_edit=timezone.now()
+        name = name,
+        text = text,
+        image = image,
+        tag = tag,
+        pub_date = timezone.now(),
+        last_edit = timezone.now()
     )
     return article
 
 
+def create_tag(name, image=None):
+    tag = Tag.objects.create(name=name)
+    if image:
+        tag.image = image
+        tag.save()
+
+    return tag
+
+
 def create_user(username, password):
     user = User.objects.create_user(username=username, password=password)
-    Writer.objects.create(name=username)
+
     return user
 
 
@@ -40,40 +62,33 @@ class IndexViewTestCase(TestCase):
         response = self.client.get(reverse('blog:index'))
         self.assertEqual(response.status_code, 200)
 
-@unittest.skip('')
+# @unittest.skip('')
 class ArticleViewTestCase(TestCase):
 
+    def setUp(self):
+        self.user = create_user('writer0')
+        self.writer = create_writer('writer0', 0)
+        self.tag = create_tag('Tag0')
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+            image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
+            self.article = create_article(self.writer, 'article1', 'article1 text', image, self.tag)
+
+
     def test_status_200(self):
-        writer = create_writer('writer1')
-        article = create_article(writer, 'article1', 'article1 text')
-        response = self.client.get(reverse('blog:article', args=(writer.name, article.name)))
+        response = self.client.get(reverse('blog:article', args=(self.writer.name, self.article.name)))
         self.assertEqual(response.status_code, 200)
 
 
-    def test_unexisting_writer(self):
-        writer = create_writer('writer1')
-        article = create_article(writer, 'article1', 'article1 text')
-        response = self.client.get(reverse('blog:article', args=('random_name', article.name)))
-        self.assertEqual(response.status_code, 404)
-
-
     def test_unexisting_article(self):
-        writer = create_writer('writer1')
-        response = self.client.get(reverse('blog:article', args=(writer.name, 'random_name')))
+        response = self.client.get(reverse('blog:article', args=(self.writer.name, 'random_name')))
         self.assertEqual(response.status_code, 404)
 
 
     def test_comment_creation(self):
         name = 'username'
         password = 'password'
-        text = 'comment text'
 
-        writer = create_writer('writer1')
-        article = create_article(writer, 'article1', 'article1 text')
 
-        self.assertTrue(Writer.objects.filter(name='writer1').exists())
-
-        create_user(name, password)
         self.client.login(username=name, password=password)
 
         response = self.client.post(
@@ -129,7 +144,7 @@ class MyPageViewTests(TestCase):
 
     def test_post_adds_image_to_writer(self):
 
-        with open(r'C:\Gry\Files\Django\blog_project\media\images_for_tests\Без названия (2).jpg', 'rb') as file:
+        with open(settings.BASE_ROOT + r'\media\test\images\Без названия (2).jpg', 'rb') as file:
             image = SimpleUploadedFile('image.jpg', file.read(), content_type='image/jpg')
 
         response = self.client.post(reverse('blog:my_page'), {'image': image})
@@ -176,7 +191,7 @@ class MyArticleViewTests(TestCase):
 
         self.assertTrue(('/blog/my_page/article1/edit/', 302) in response.redirect_chain)
 
-
+@unittest.skip('')
 class AddViewTests(TestCase):
 
     def setUp(self):
