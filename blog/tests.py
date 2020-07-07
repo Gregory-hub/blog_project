@@ -179,21 +179,24 @@ class MyPageViewTests(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertTrue(writer.image.path.startswith(settings.MEDIA_ROOT + r'\media\writers\images\test2'))
 
-# @unittest.skip('')
+@unittest.skip('done')
 class MyArticleViewTests(TestCase):
 
     def setUp(self):
-        self.name = 'name'
-        self.password = 'password'
-        self.user = create_user(self.name, self.password)
-        self.writer = Writer.objects.get(name=self.user.username)
-        self.article = self.writer.article_set.create(
-            name = 'article1',
-            text = 'article1 text',
-            pub_date = timezone.now(),
-            last_edit = timezone.now()
-        )
-        self.client.login(username=self.name, password=self.password)
+        self.tag = create_tag('No tag')
+        self.user = create_user('writer0', 'writer0')
+        self.writer = create_writer('writer0', 0)
+        self.client.login(username='writer0', password='writer0')
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as image:
+            image = SimpleUploadedFile('test0.jpg', image.read(), content_type='image/jpeg')
+            self.article = self.writer.article_set.create(
+                name = 'article1',
+                text = 'article1 text',
+                tag = self.tag,
+                image = image,
+                pub_date = timezone.now(),
+                last_edit = timezone.now()
+            )
 
 
     def test_get_status_200(self):
@@ -201,76 +204,24 @@ class MyArticleViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-    def test_post_delete_deletes_article(self):
-        name = self.article.name
-        response = self.client.post(reverse('blog:my_article', args=(self.article.name, )), {'value': 'delete'})
-
-        self.assertFalse(Article.objects.filter(name=name).exists())
-        self.assertEqual(response.status_code, 302)
-
-
-    def test_post_edit_redirects_to_edit_page(self):
-        name = self.article.name
-        response = self.client.post(reverse('blog:my_article', args=(self.article.name, )), {'value': 'edit'}, follow=True)
-
-        self.assertTrue(('/blog/my_page/article1/edit/', 302) in response.redirect_chain)
-
-@unittest.skip('')
-class AddViewTests(TestCase):
-
-    def setUp(self):
-        self.user = create_user('username', 'password')
-        self.client.login(username='username', password='password')
-        self.tag = Tag.objects.create(name='test')
-
-
-    def test_get_response_200(self):
-        response = self.client.get(reverse('blog:add'))
-        self.assertEquals(response.status_code, 200)
-
-
-    # def test_post_adds_article(self):
-    #     name = 'new name'
-    #     text = 'new text'
-    #
-    #     response = self.client.post(reverse('blog:add'), {'name': name, 'text': text, 'tag': self.tag.name})
-    #
-    #     if response.context:
-    #         print(response.context['message'])
-    #
-    #     self.assertTrue(Article.objects.filter(name=name, text=text).exists())
-
-
-    # def test_post_unique_names(self):
-    #
-    #     tag = Tag.objects.create(name='tag')
-    #
-    #     name1 = 'name1'
-    #     text1 = 'text1'
-    #     response = self.client.post(reverse('blog:add'), {'name': name1, 'text': text1, 'tag': tag.name})
-    #
-    #     name2 = 'name1'
-    #     text2 = 'text2'
-    #     response = self.client.post(reverse('blog:add'), {'name': name2, 'text': text2, 'tag': tag.name})
-    #
-    #     self.assertEquals(response.status_code, 200)
-    #     self.assertEquals(response.context['message'], 'This name is not available')
-
-@unittest.skip('')
+@unittest.skip('done')
 class EditViewTests(TestCase):
 
     def setUp(self):
-        self.name = 'name'
-        self.password = 'password'
-        self.user = create_user(self.name, self.password)
-        self.writer = Writer.objects.get(name=self.user.username)
-        self.article = self.writer.article_set.create(
-            name = 'article1',
-            text = 'article1 text',
-            pub_date = timezone.now(),
-            last_edit = timezone.now()
-        )
-        self.client.login(username=self.name, password=self.password)
+        self.tag = create_tag('No tag')
+        self.user = create_user('writer0', 'writer0')
+        self.writer = create_writer('writer0', 0)
+        self.client.login(username='writer0', password='writer0')
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as image:
+            image = SimpleUploadedFile('test0.jpg', image.read(), content_type='image/jpeg')
+            self.article = self.writer.article_set.create(
+                name = 'article1',
+                text = 'article1 text',
+                tag = self.tag,
+                image = image,
+                pub_date = timezone.now(),
+                last_edit = timezone.now()
+            )
 
 
     def test_get_response_200(self):
@@ -278,102 +229,82 @@ class EditViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-    def test_post_edits_article(self):
-        old_name = self.article.name
-        old_text = self.article.text
-
-        new_name = 'new article1 name'
-        new_text = 'new article1 text'
+    def test_post_edits_article_without_image(self):
+        new_name = 'New article name'
+        new_text = 'New article text'
+        new_tag = create_tag('Design')
 
         response = self.client.post(
-            reverse('blog:edit', args=(self.article.name, )),
-            {'name': new_name, 'text': new_text}
-        )
+            reverse('blog:edit', args=(self.article.name, )),{
+                'name': new_name,
+                'text': new_text,
+                'tag': new_tag
+            })
 
-        article = Article.objects.get(id=1)
+        self.assertTrue(Article.objects.get(
+            author = self.writer,
+            name = new_name,
+            text = new_text,
+            tag = new_tag,
+        ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test0'))
 
+
+        def test_post_edits_article_with_image(self):
+            new_name = 'New article name'
+            new_text = 'New article text'
+            new_tag = create_tag('Design')
+            with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as image:
+                new_image = SimpleUploadedFile('test1.jpg', image.read(), content_type='image/jpeg')
+
+            response = self.client.post(
+                reverse('blog:edit', args=(self.article.name, )),{
+                    'name': new_name,
+                    'text': new_text,
+                    'tag': new_tag,
+                    'image': new_image
+                })
+
+            self.assertEqual(Article.objects.get(
+                author = self.writer,
+                name = new_name,
+                text = new_text,
+                tag = new_tag,
+            ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test1'))
+
+
+@unittest.skip('done')
+class DeleteViewTests(TestCase):
+
+    def setUp(self):
+        self.tag = create_tag('No tag')
+        self.user = create_user('writer0', 'writer0')
+        self.writer = create_writer('writer0', 0)
+        self.client.login(username='writer0', password='writer0')
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as image:
+            image = SimpleUploadedFile('test0.jpg', image.read(), content_type='image/jpeg')
+            self.article = self.writer.article_set.create(
+                name = 'article1',
+                text = 'article1 text',
+                tag = self.tag,
+                image = image,
+                pub_date = timezone.now(),
+                last_edit = timezone.now()
+            )
+
+
+    def test_get_deletes_article(self):
+        response = self.client.get(reverse('blog:delete', args=(self.article.name, )))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(article.name, new_name)
-        self.assertEqual(article.text, new_text)
-        self.assertTrue(timezone.now() - article.last_edit < timedelta(seconds=3))
+        self.assertFalse(Article.objects.filter(author=self.writer, name=self.article.name).exists())
 
 
-    def test_post_unique_names(self):
+    def test_get_dont_deletes_article_if_unauthenticated(self):
+        client = Client()
+        response = client.get(reverse('blog:delete', args=(self.article.name, )))
+        self.assertEqual(response.status_code, 401)
+        self.assertTrue(Article.objects.filter(author=self.writer, name=self.article.name).exists())
 
-        article2 = self.writer.article_set.create(
-            name = 'article2',
-            text = 'article2 text',
-            pub_date = timezone.now(),
-            last_edit = timezone.now()
-        )
-
-        response = self.client.post(
-            reverse('blog:edit', args=(article2.name, )),
-            {'name': 'article1', 'text': 'new article2 text'}
-        )
-
-        article = Article.objects.get(id=2)
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['message'], 'This name is not available')
-        self.assertEqual(article.name, 'article2')
-        self.assertEqual(article.text, 'article2 text')
-
-
-        create_user('writer2', 'password')
-        writer2 = Writer.objects.get(name='writer2')
-        article3 = writer2.article_set.create(
-            name = 'article3',
-            text = 'article3 text',
-            pub_date = timezone.now(),
-            last_edit = timezone.now()
-        )
-
-        self.client.login(username='writer2', password='password')
-        response = self.client.post(
-            reverse('blog:edit', args=(article3.name, )),
-            {'name': 'article1', 'text': 'new article3 text'}
-        )
-
-        article = Article.objects.get(id=3)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(article.name, 'article1')
-        self.assertEqual(article.text, 'new article3 text')
-
-
-    def test_post_if_text_field_is_empty(self):
-
-        old_text = self.article.text
-
-        response = self.client.post(
-            reverse('blog:edit', args=(self.article.name, )),
-            {'name': 'new name', 'text': ''}
-        )
-
-        article = Article.objects.get(id=1)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(article.name, 'new name')
-        self.assertEqual(article.text, old_text)
-
-
-    def test_post_if_name_field_is_empty(self):
-
-        old_name = self.article.name
-
-        response = self.client.post(
-            reverse('blog:edit', args=(self.article.name, )),
-            {'name': '', 'text': 'new text'}
-        )
-
-        article = Article.objects.get(id=1)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(article.name, old_name)
-        self.assertEqual(article.text, 'new text')
-
-@unittest.skip('')
+@unittest.skip('done')
 class LogInViewTests(TestCase):
 
     def test_get_response_200(self):
@@ -395,7 +326,7 @@ class LogInViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(user.is_authenticated)
 
-@unittest.skip('')
+@unittest.skip('done')
 class SingUpViewTests(TestCase):
 
     def test_get_response_200(self):
@@ -417,7 +348,7 @@ class SingUpViewTests(TestCase):
 
         self.assertEquals(response.status_code, 302)
 
-@unittest.skip('')
+@unittest.skip('done')
 class LogOutViewTests(TestCase):
 
     def test_if_logout_post_logs_user_out(self):
@@ -443,3 +374,40 @@ class LogOutViewTests(TestCase):
         self.assertFalse(user.is_authenticated)
 
         self.assertEquals(response.status_code, 302)
+
+
+@unittest.skip('done')
+class AuthorsViewTestCase(TestCase):
+
+    def test_status_200(self):
+        response = self.client.get(reverse('blog:authors'))
+        self.assertEqual(response.status_code, 200)
+
+        for i in range(20):
+            writer_name = 'writer' + str(i)
+            create_writer(writer_name, i)
+            response = self.client.get(reverse('blog:authors'))
+            self.assertEqual(response.status_code, 200)
+
+
+@unittest.skip('done')
+class TagsViewTestCase(TestCase):
+
+    def test_status_200(self):
+        response = self.client.get(reverse('blog:authors'))
+        self.assertEqual(response.status_code, 200)
+
+        for i in range(20):
+            tag_name = 'tag' + str(i)
+            create_tag(tag_name)
+            response = self.client.get(reverse('blog:authors'))
+            self.assertEqual(response.status_code, 200)
+
+
+@unittest.skip('done')
+class TagViewTestCase(TestCase):
+
+    def test_status_200(self):
+        tag = create_tag('tag')
+        response = self.client.get(reverse('blog:tag', args=(tag.name, )))
+        self.assertEqual(response.status_code, 200)

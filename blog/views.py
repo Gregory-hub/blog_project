@@ -424,7 +424,6 @@ def authors(request):
     template = 'blog/authors.html'
 
     writers = Writer.objects.annotate(num_articles=Count('article')).order_by('-num_articles')
-
     context = {
         'writers': writers,
     }
@@ -439,7 +438,7 @@ def tags(request):
 
     if len(tags) == 0:
         tags, top_tags = None, None
-    if 1 <= len(tags) <= 3:
+    elif 1 <= len(tags) <= 3:
         top_tags, tags = tags, None
     else:
         top_tags, tags = tags[:3], tags[3:]
