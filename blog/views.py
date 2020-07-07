@@ -117,8 +117,7 @@ def article(request, writer_name, article_name):
         'message': '',
     }
     if not request.user.is_authenticated:
-        context['message'] = 'You cannot comment. Login to unlock this privelegy'
-
+        context['message'] = 'You cannot comment. Please login'
 
     if request.method == 'GET':
         return render(request, template, context)
@@ -216,7 +215,6 @@ def my_page(request):
             # add article form
 
             add_form = AddForm(request.POST, request.FILES)
-
             if add_form.is_valid():
                 tag_name = add_form.cleaned_data['tag']
 
@@ -252,9 +250,8 @@ def my_page(request):
 
             image_form = WriterImageForm(request.POST, request.FILES, instance=writer)
             if image_form.is_valid:
-                if request.FILES['image'] != '':
-                    image_form.save()
-                    return HttpResponseRedirect(reverse('blog:my_page'))
+                image_form.save()
+                return HttpResponseRedirect(reverse('blog:my_page'))
             else:
                 context['message'] = 'Form is invalid'
                 return render(request, template, context)

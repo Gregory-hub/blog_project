@@ -84,8 +84,8 @@
 </div>
 
 <div class="button__spec">
-    <button class="nav__link--sign specbtn" id="show">delete article</button><br>
-    <button class="nav__link--sign specbtn" id="shown">edit article</button>
+    <a href="{% url 'blog:delete' article.name %}" class="nav__link--sign specbtn" id="show">delete article</a>
+    <a href="{% url 'blog:edit' article.name %}" class="nav__link--sign specbtn" id="shown">edit article</a>
 </div>
 
 <footer class="footer">

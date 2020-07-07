@@ -11,6 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
 from .models import *
+from .forms import *
 
 
 def create_writer(name, age, image=None, bio=None):
@@ -55,18 +56,18 @@ def create_user(username, password):
     return user
 
 
-@unittest.skip('')
+@unittest.skip('done')
 class IndexViewTestCase(TestCase):
 
     def test_status_200(self):
         response = self.client.get(reverse('blog:index'))
         self.assertEqual(response.status_code, 200)
 
-# @unittest.skip('')
+@unittest.skip('done')
 class ArticleViewTestCase(TestCase):
 
     def setUp(self):
-        self.user = create_user('writer0')
+        self.user = create_user('writer0', 'writer0')
         self.writer = create_writer('writer0', 0)
         self.tag = create_tag('Tag0')
         with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
@@ -85,36 +86,38 @@ class ArticleViewTestCase(TestCase):
 
 
     def test_comment_creation(self):
-        name = 'username'
-        password = 'password'
+        username = 'commentator'
+        password = 'commentator'
 
+        commentator = create_user(username, password)
+        create_writer(username, 93)
+        self.client.login(username=username, password=password)
 
-        self.client.login(username=name, password=password)
-
+        text = 'comment text'
         response = self.client.post(
-            reverse('blog:article', args=(writer.name, article.name)),
+            reverse('blog:article', args=(self.writer.name, self.article.name)),
             {'text': text},
         )
         self.assertEqual(response.status_code, 302)
 
-        self.assertTrue(Comment.objects.filter(article=article, text=text).exists())
+        self.assertTrue(Comment.objects.filter(article=self.article, text=text).exists())
 
-@unittest.skip('')
+@unittest.skip('done')
 class WriterViewTests(TestCase):
 
     def test_status_200(self):
-        writer = create_writer('writer1')
+        writer = create_writer('writer0', 31)
         response = self.client.get(reverse('blog:writer', args=(writer.name, )))
         self.assertEqual(response.status_code, 200)
 
-@unittest.skip('')
+@unittest.skip('done')
 class MyPageViewTests(TestCase):
 
     def setUp(self):
-        self.name = 'name'
-        self.password = 'password'
-        self.user = create_user(self.name, self.password)
-        self.client.login(username=self.name, password=self.password)
+        self.tag = create_tag('No tag')
+        self.user = create_user('writer0', 'writer0')
+        self.writer = create_writer('writer0', 0)
+        self.client.login(username='writer0', password='writer0')
 
 
     def test_get_status_200(self):
@@ -122,40 +125,61 @@ class MyPageViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-    def test_if_no_articles(self):
-        response = self.client.get(reverse('blog:my_page'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['message'], 'No articles')
+    def test_post_add_form(self):
+        name = 'article0'
+        text = 'article0 text'
+        tag = self.tag
+
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as image:
+            image = SimpleUploadedFile('test1.jpg', image.read(), content_type='image/jpeg')
+            response = self.client.post(reverse('blog:my_page'), {
+                'add_form': ['Save'],
+                'name': name,
+                'text': text,
+                'tag': tag.name,
+                'image': image,
+            })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Article.objects.get(
+            author = self.writer,
+            name = name,
+            text = text,
+            tag = tag,
+        ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test1'))
 
 
-    def test_if_5_articles(self):
+    def test_post_bio_form(self):
+        bio = 'bio'
+        age = 54
+
+        response = self.client.post(reverse('blog:my_page'), {
+            'bio_form': ['Submit'],
+            'bio': bio,
+            'age': age,
+        })
+
+        writer = Writer.objects.get(name='writer0')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(writer.age, age)
+        self.assertEqual(writer.bio, bio)
+
+
+    def test_post_image_form(self):
+        with open(settings.MEDIA_ROOT + r'\media\test\images\test2.jpg', 'rb') as image:
+            image = SimpleUploadedFile('test2.jpg', image.read(), content_type='image/jpeg')
+
+        response = self.client.post(reverse('blog:my_page'), {
+            'image_form': ['Submit'],
+            'image': image,
+        })
+
         writer = Writer.objects.get(name=self.user.username)
-        for i in range(5):
-            writer.article_set.create(
-                name = 'article' + str(i),
-                text = 'article' + str(i) + ' text',
-                pub_date = timezone.now(),
-                last_edit = timezone.now()
-            )
-        response = self.client.get(reverse('blog:my_page'))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['articles'].count(), 5)
-
-
-    def test_post_adds_image_to_writer(self):
-
-        with open(settings.BASE_ROOT + r'\media\test\images\Без названия (2).jpg', 'rb') as file:
-            image = SimpleUploadedFile('image.jpg', file.read(), content_type='image/jpg')
-
-        response = self.client.post(reverse('blog:my_page'), {'image': image})
-
-        writer = Writer.objects.get(name=self.user.username)
-
         self.assertEquals(response.status_code, 302)
-        self.assertTrue(writer.image.name.startswith('writers/images/image'))
-        self.assertTrue(writer.image.name.endswith('.jpg'))
+        self.assertTrue(writer.image.path.startswith(settings.MEDIA_ROOT + r'\media\writers\images\test2'))
 
-@unittest.skip('')
+# @unittest.skip('')
 class MyArticleViewTests(TestCase):
 
     def setUp(self):

@@ -564,6 +564,7 @@ dialog::backdrop {
     padding: 10px 20px ;
     margin-bottom: 10px;
     outline: 0;
+    margin: 40px;
 }
 
 
