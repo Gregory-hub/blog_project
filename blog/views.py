@@ -469,3 +469,11 @@ def tag(request, tag_name):
     }
 
     return render(request, template, context)
+
+
+def search(request, query):
+    # template = 'blog/search.html'
+
+    articles = Article.objects.filter(name=query)
+    writers = Writer.objects.filter(name=query)
+    tags = Tag.objects.filter(name=query)

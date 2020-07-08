@@ -1,4 +1,3 @@
-
 $(function () {
     let nav = $("#nav");
     let navToggle = $("#navToggle");

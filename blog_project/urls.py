@@ -4,8 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('blog/', include('blog.urls')),
     path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
 ]
 
 if settings.DEBUG:
