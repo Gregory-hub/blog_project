@@ -59,14 +59,6 @@ def get_groups(article_set):
     return groups
 
 
-def upload_file(dest, file):
-    filename = default_storage.get_available_name(os.path.join(dest, file.name))
-    with open(filename, 'wb+') as dest:
-        for c in file.chunks():
-            dest.write(c)
-    return filename
-
-
 def render_empty_form(request, form, template, message=''):
     context = {
         'message': message,
@@ -77,6 +69,8 @@ def render_empty_form(request, form, template, message=''):
 # done
 def index(request):
     template = 'blog/blog_index.html'
+
+    print(request.user.is_authenticated)
 
     articles = Article.objects.order_by('-pub_date')
     if len(articles) > 1:
@@ -223,18 +217,16 @@ def my_page(request):
                 tag = get_object_or_404(Tag, name=tag_name)
                 writer = Writer.objects.get(name=request.user.username)
 
-                imagename = upload_file('media/articles/images/', request.FILES['image'])
-
                 if list(writer.article_set.filter(name=name)) == []:
 
-                    writer.article_set.create(
+                    article = writer.article_set.create(
                         name = name,
                         text = text,
-                        image = imagename,
                         tag = tag,
                         pub_date = timezone.now(),
                         last_edit = timezone.now(),
                     )
+                    article.upload_image(request.FILES['image'])
 
                     return HttpResponseRedirect(reverse('blog:my_page'))
                 else:
@@ -250,6 +242,7 @@ def my_page(request):
 
             image_form = WriterImageForm(request.POST, request.FILES, instance=writer)
             if image_form.is_valid:
+                writer.delete_image()
                 image_form.save()
                 return HttpResponseRedirect(reverse('blog:my_page'))
             else:
@@ -305,23 +298,19 @@ def edit(request, article_name):
 
             name = form.cleaned_data['name']
             text = form.cleaned_data['text']
-            if 'image' in request.FILES:
-                image = request.FILES['image']
-            else:
-                image = None
             tag = get_object_or_404(Tag, name=tag_name)
 
             article.name = name
             article.text = text
             article.tag = tag
 
-            if image:
-                article.image = image
+            if 'image' in request.FILES:
+                article.upload_image(request.FILES['image'])
 
             article.last_edit=timezone.now()
 
             article.save()
-            return HttpResponseRedirect(reverse('blog:index'))      # my_article', args=(article.name, )))
+            return HttpResponseRedirect(reverse('blog:my_article', args=(article.name, )))
         else:
             context['message'] = 'Form is invalid'
             return render(request, template, context)
@@ -334,6 +323,7 @@ def delete(request, article_name):
         return HttpResponse('<h1>401 unauthorized</h1>', status=401)
 
     writer = Writer.objects.get(name=user.username)
+    writer.article_set.get(name=article_name).delete_image()
     writer.article_set.get(name=article_name).delete()
 
     return HttpResponseRedirect(reverse('blog:my_page'))
