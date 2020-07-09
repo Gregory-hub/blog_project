@@ -131,7 +131,11 @@
                         <div class="blogs__item1 bi14">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:my_article' article.name %}">
-                                    <img src="{{ article.image.url }}" class="blogs__img">
+                                    {% if article.image %}
+                                        <img src="{{ article.image.url }}" class="blogs__img">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="" class="blogs__img">
+                                    {% endif %}
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:my_article' article.name %}"><h2 class="blogs__text">{{ article.name }}</h2></a>
                                         <div class="blogs__auth">

@@ -19,13 +19,8 @@ class AddForm(forms.Form):
     image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'avatarfile'}))
 
 
-class WriterImageForm(forms.ModelForm):
-    class Meta:
-        model = Writer
-        fields = ('image', )
-        widgets = {
-            'image': forms.ClearableFileInput(attrs={'id': 'af', 'name': 'avatarfile'}),
-        }
+class WriterImageForm(forms.Form):
+    image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'af', 'name': 'avatarfile'}))
 
 
 class WriterBioForm(forms.ModelForm):

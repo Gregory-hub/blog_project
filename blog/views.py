@@ -70,8 +70,6 @@ def render_empty_form(request, form, template, message=''):
 def index(request):
     template = 'blog/blog_index.html'
 
-    print(request.user.is_authenticated)
-
     articles = Article.objects.order_by('-pub_date')
     if len(articles) > 1:
         article1 = articles[0]
@@ -240,10 +238,10 @@ def my_page(request):
 
             # writer image form
 
-            image_form = WriterImageForm(request.POST, request.FILES, instance=writer)
+            image_form = WriterImageForm(request.POST, request.FILES)
             if image_form.is_valid:
                 writer.delete_image()
-                image_form.save()
+                writer.upload_image(request.FILES['image'])
                 return HttpResponseRedirect(reverse('blog:my_page'))
             else:
                 context['message'] = 'Form is invalid'
