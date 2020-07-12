@@ -1,6 +1,7 @@
 import random
 import datetime
 import os
+from fuzzysearch import find_near_matches
 
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.utils import timezone
@@ -57,6 +58,25 @@ def get_groups(article_set):
             slice, articles = articles[len(articles)-3:], articles[:len(articles)-3]
             groups.append([mode, slice])
     return groups
+
+
+def search_in(sequence, q):
+    if not type(sequence) is list:
+        try:
+            sequence = list(sequence)
+        except TypeError as TR:
+            raise TR
+
+    l_dist = len(q) // 4
+
+    result = []
+    for i in range(len(sequence)):
+        if find_near_matches(q, sequence[i].name, max_l_dist=l_dist) != []:
+            result.append(sequence[i])
+    if len(result) == 0:
+        return None
+
+    return result
 
 
 def render_empty_form(request, form, template, message=''):
@@ -460,13 +480,15 @@ def tag(request, tag_name):
 
 
 def search(request):
-    template = 'blog/test.html'
+    template = 'blog/search.html'
 
-    query = request.GET.get('q')
+    q = request.GET.get('q')
+    if len(q) == 0:
+        return HttpResponseRedirect(reverse('blog:index'))
 
-    articles = Article.objects.filter(name=query)
-    writers = Writer.objects.filter(name=query)
-    tags = Tag.objects.filter(name=query)
+    articles = search_in(Article.objects.all(), q)
+    writers = search_in(Writer.objects.all(), q)
+    tags = search_in(Tag.objects.all(), q)
 
     context = {
         'articles': articles,

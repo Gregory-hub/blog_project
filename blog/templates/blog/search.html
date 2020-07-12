@@ -35,76 +35,82 @@
 </div>
 
 
-    <header class="header">
-        <div class="container">
-            <div class="header__inner">
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
 
-                <div class="header__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
-                </div>
-
-                <nav class="nav" id="nav">
-                    <a class="nav__link" href="blog_index.html">Main</a>
-                    <a class="nav__link" href="contact.html">Contact</a>
-                    <a class="nav__link" href="authors.html">Authors</a>
-                    <a class="nav__link" href="tags.html">Tags</a>
-                    <a class="nav__link--sign" href="sign_in.html">Sign in</a>
-                    <a class="nav__link--sign" href="sign_up.html">Sign up</a>
-                    <a class="nav__link--sign" href="add.html">Your page</a>
-                    <a class="nav__photo" id="photobtn" href="#">
-                         <svg class="nav__photosearch">
-                            <use xlink:href="#search"> </use>
-                        </svg>
-                    </a>
-                </nav>
-                <button class="burger" type="button" id="navToggle" >
-                    <span class="burger__item">Menu</span>
-                </button>
-            </div>
-            <div class="search__item" id="searitem">
-                <div class="search__line">
-                    <form action="search.html" class="box" method="post">
-                        <input type="title" id="title" name="" placeholder="Search here">
-                    </form>
-                </div>
+            <div class="header__logo">
+                <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
             </div>
 
+            <nav class="nav">
+                <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
+                {% if request.user.is_authenticated %}
+                    <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                {% else %}
+                    <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                    <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                {% endif %}
+                <a class="nav__photo" id="photobtn" href="">
+                    <svg class="nav__photosearch">
+                        <use xlink:href="#search"> </use>
+                    </svg>
+                </a>
+            </nav>
+            <button class="burger" type="button" id="navToggle" >
+                <span class="burger__item">Menu</span>
+            </button>
         </div>
-    </header>
-
+        <div class="search__item" id="searitem">
+            <div class="search__line">
+                <form action="{% url 'blog:search' %}" class="box" method="get">
+                    <input type="title" id="title" name="q" placeholder="Search">
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="search">
     <div class="container">
         <div class="search__items">
+            <div class="search__title">Articles</div>
+            <div class="search__objs">
+                {% if articles %}
+                    {% for article in articles %}
+                        <a href="{% url 'blog:article' article.author.name article.name %}" class="search__obj">{{ article.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <p>No matched articles</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="search__items">
             <div class="search__title">Tags</div>
             <div class="search__objs">
-                <a href="tag.html" class="search__obj">Journey</a>
-                <a href="tag.html" class="search__obj">Journey</a>
-                <a href="tag.html" class="search__obj">Journey</a>
-                <a href="tag.html" class="search__obj">Journey</a>
-                <a href="tag.html" class="search__obj">Journey</a>
+                {% if tags %}
+                    {% for tag in tags %}
+                        <a href="{% url 'blog:tag' tag.name %}" class="search__obj">{{ tag.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <p>No matched tags</p>
+                {% endif %}
             </div>
         </div>
 
         <div class="search__items">
-            <div class="search__title">Title</div>
+            <div class="search__title">Writers</div>
             <div class="search__objs">
-                <a href="article.html" class="search__obj">Russia is great</a>
-                <a href="article.html" class="search__obj">Russia is great</a>
-                <a href="article.html" class="search__obj">Russia is great</a>
-                <a href="article.html" class="search__obj">Russia is great</a>
-                <a href="article.html" class="search__obj">Russia is great</a>
-            </div>
-        </div>
-
-        <div class="search__items">
-            <div class="search__title">Authors</div>
-            <div class="search__objs">
-                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
-                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
-                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
-                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
-                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+                {% if writers %}
+                    {% for writer in writers %}
+                        <a href="{% url 'blog:writer' writer.name %}" class="search__obj">{{ writer.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <p>No matched writers</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -116,23 +122,13 @@
         <div class="footer__footer">
             <div class="footer__col">
                 <div class="footer__logo">
-                    <a class="header__logotype" href="#">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
             </div>
             <div class="footer__col fc2">
-                <a class="nv--li nv" href="#">Main</a>
-                <a class="nav__link nv" href="contact.html">Contact</a>
-                <a class="nav__link nv" href="authors.html">Authors</a>
-                <a class="nav__link nv" href="tags.html">Tags</a>
-            </div>
-            <div class="footer__col fc1">
-                <div class="footer__icon">
-                    <a href="#">
-                        <div>
-                            <img class="footer__iconph" src="../images/icon.png" alt="">
-                        </div>
-                    </a>
-                </div>
+                <a class="nv--li" href="{% url 'blog:index' %}">Main</a>
+                <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
+                <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
             </div>
         </div>
         <div class="copyright">
@@ -146,7 +142,7 @@
     </div>
 </footer>
 
-<script src="../js/search.js"></script>
+<script src="{% static 'blog/js/search.js' %}"></script>
 
 </body>
 </html>

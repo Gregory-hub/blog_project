@@ -1,3 +1,8 @@
+document.getElementById("photobtn").onclick = function(event){
+    event.preventDefault();
+    document.getElementById("searitem").style.display = "block";
+}
+
 $(function () {
     let nav = $("#nav");
     let navToggle = $("#navToggle");

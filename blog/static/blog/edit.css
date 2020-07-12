@@ -209,7 +209,7 @@ h1,h2,h3,h4,h5,h6{
     right: 5%;
 }
 
-.boxl input[type = "text"]{
+.boxl input[type = "title"]{
     border: 0;
 
     background: none;
@@ -229,7 +229,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 
-.boxl input[type = "text"]:focus{
+.boxl input[type = "title"]:focus{
     border-color: #e7a007;
 }
 

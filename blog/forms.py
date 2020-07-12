@@ -13,7 +13,7 @@ def get_choices():
 
 
 class AddForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'id': 'title', 'placeholder': 'Title', 'autocomplete': 'off'}), max_length=70)
+    name = forms.CharField(widget=forms.TextInput(attrs={'type': 'title', 'id': 'title', 'placeholder': 'Title', 'autocomplete': 'off'}), max_length=70)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'art', 'class': 'textareacl', 'placeholder': 'Text' ,'autocomplete': 'off'}))
     tag = forms.ChoiceField(widget=forms.RadioSelect(), choices=get_choices())
     image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'avatarfile'}))

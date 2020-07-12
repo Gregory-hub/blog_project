@@ -146,6 +146,30 @@ h1,h2,h3,h4,h5,h6{
     transition: .3s;
 }
 
+.search__item{
+    display: none;
+    text-align: right;
+    margin-top: 10px;
+
+
+}
+
+.box input[type="title"]{
+    height: 30px;
+    width: 200px;
+    border-radius: 20px;
+    border:2px solid #717171;
+    background: none;
+    outline: 0;
+    color:#fff;
+    padding: 15px 5px;
+    transition: .3s;
+    z-index: 2000;
+}
+
+.box input[type="title"]:focus{
+    border-color: #000;
+}
 
 /*Fixword
 ===================*/
@@ -464,6 +488,17 @@ h1,h2,h3,h4,h5,h6{
 
     .burger{
         display: block;
+    }
+    .search__item{
+        margin-top: 250px;
+        position: absolute;
+        z-index: 2000;
+        right: 0;
+    }
+
+    .box input[type="title"]{
+        width: 100px;
+        margin-right: 30px;
     }
 /*    Tags*/
     .tag__item1{
