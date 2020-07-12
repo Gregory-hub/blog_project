@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog BN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google" content="notranslate" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/search.css' %}">
+</head>
+<body>
+
+
+    <svg style="display: none;">
+        <symbol id="search" viewBox="0 0 24 24">
+            <g> <path  d="M 18.4203 15.58 L 24 21.1597 L 21.1597 24 L 15.58 18.4203 C 13.9925 19.4718 12.0888 20.0841 10.0421 20.0841 C 4.49598 20.0841 0 15.5881 0 10.0421 C 0 4.49598 4.49598 0 10.0421 0 C 15.5881 0 20.0841 4.49598 20.0841 10.0421 C 20.0841 12.0888 19.4718 13.9925 18.4203 15.58 Z M 10.0421 16.0673 C 13.3697 16.0673 16.0673 13.3697 16.0673 10.0421 C 16.0673 6.71441 13.3697 4.01682 10.0421 4.01682 C 6.71441 4.01682 4.01682 6.71441 4.01682 10.0421 C 4.01682 13.3697 6.71441 16.0673 10.0421 16.0673 Z"/>
+            </g>
+        </symbol>
+        <symbol id="next" viewBox="0 0 492.004 492.004" >
+            <g>
+                <path d="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
+                c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
+                c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
+                c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"/>
+            </g>
+        </symbol>
+    </svg>
+
+
+<div class="fixword">
+    <div class="fixword__text">
+        Blog from BN
+    </div>
+</div>
+
+
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+
+                <div class="header__logo">
+                    <a class="header__logotype" href="#">Blog BN</a>
+                </div>
+
+                <nav class="nav" id="nav">
+                    <a class="nav__link" href="blog_index.html">Main</a>
+                    <a class="nav__link" href="contact.html">Contact</a>
+                    <a class="nav__link" href="authors.html">Authors</a>
+                    <a class="nav__link" href="tags.html">Tags</a>
+                    <a class="nav__link--sign" href="sign_in.html">Sign in</a>
+                    <a class="nav__link--sign" href="sign_up.html">Sign up</a>
+                    <a class="nav__link--sign" href="add.html">Your page</a>
+                    <a class="nav__photo" id="photobtn" href="#">
+                         <svg class="nav__photosearch">
+                            <use xlink:href="#search"> </use>
+                        </svg>
+                    </a>
+                </nav>
+                <button class="burger" type="button" id="navToggle" >
+                    <span class="burger__item">Menu</span>
+                </button>
+            </div>
+            <div class="search__item" id="searitem">
+                <div class="search__line">
+                    <form action="search.html" class="box" method="post">
+                        <input type="title" id="title" name="" placeholder="Search here">
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+
+<div class="search">
+    <div class="container">
+        <div class="search__items">
+            <div class="search__title">Tags</div>
+            <div class="search__objs">
+                <a href="tag.html" class="search__obj">Journey</a>
+                <a href="tag.html" class="search__obj">Journey</a>
+                <a href="tag.html" class="search__obj">Journey</a>
+                <a href="tag.html" class="search__obj">Journey</a>
+                <a href="tag.html" class="search__obj">Journey</a>
+            </div>
+        </div>
+
+        <div class="search__items">
+            <div class="search__title">Title</div>
+            <div class="search__objs">
+                <a href="article.html" class="search__obj">Russia is great</a>
+                <a href="article.html" class="search__obj">Russia is great</a>
+                <a href="article.html" class="search__obj">Russia is great</a>
+                <a href="article.html" class="search__obj">Russia is great</a>
+                <a href="article.html" class="search__obj">Russia is great</a>
+            </div>
+        </div>
+
+        <div class="search__items">
+            <div class="search__title">Authors</div>
+            <div class="search__objs">
+                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+                <a href="user_public.html" class="search__obj"> Bogdankov Nikita</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__footer">
+            <div class="footer__col">
+                <div class="footer__logo">
+                    <a class="header__logotype" href="#">Blog BN</a>
+                </div>
+            </div>
+            <div class="footer__col fc2">
+                <a class="nv--li nv" href="#">Main</a>
+                <a class="nav__link nv" href="contact.html">Contact</a>
+                <a class="nav__link nv" href="authors.html">Authors</a>
+                <a class="nav__link nv" href="tags.html">Tags</a>
+            </div>
+            <div class="footer__col fc1">
+                <div class="footer__icon">
+                    <a href="#">
+                        <div>
+                            <img class="footer__iconph" src="../images/icon.png" alt="">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <div class="copy__text">
+                ©  2020 B&K. All Rights Reserved
+            </div>
+            <div class="copyright__author">
+                <span class="copy__text">Made by</span>  Bogdankov Nikita <span class="copy__text"> and </span> Grigory Novikov
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/search.js"></script>
+
+</body>
+</html>

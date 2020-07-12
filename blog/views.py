@@ -459,9 +459,19 @@ def tag(request, tag_name):
     return render(request, template, context)
 
 
-def search(request, query):
-    # template = 'blog/search.html'
+def search(request):
+    template = 'blog/test.html'
+
+    query = request.GET.get('q')
 
     articles = Article.objects.filter(name=query)
     writers = Writer.objects.filter(name=query)
     tags = Tag.objects.filter(name=query)
+
+    context = {
+        'articles': articles,
+        'writers': writers,
+        'tags': tags
+    }
+
+    return render(request, template, context)

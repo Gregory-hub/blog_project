@@ -14,6 +14,7 @@ urlpatterns = [
     path('my_page/<str:article_name>/', my_article, name='my_article'),
     path('my_page/<str:article_name>/edit/', edit, name='edit'),
     path('my_page/<str:article_name>/delete/', delete, name='delete'),
+    path('search/', search, name='search'),
     path('<str:writer_name>/', writer, name='writer'),
     path('<str:writer_name>/<str:article_name>/', article, name='article'),
 ]
