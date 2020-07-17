@@ -90,6 +90,9 @@ def render_empty_form(request, form, template, message=''):
 def index(request):
     template = 'blog/blog_index.html'
 
+    if request.user.is_authenticated and not Writer.objects.filter(name=request.user.username).exists():
+        logout(request)
+
     articles = Article.objects.order_by('-pub_date')
     if len(articles) > 1:
         article1 = articles[0]
@@ -126,7 +129,7 @@ def article(request, writer_name, article_name):
         'form': form,
         'recommended_article': recommended_article,
         'comments': article.comment_set.order_by('-comment_date'),
-        'message': '',
+        'message': None,
     }
     if not request.user.is_authenticated:
         context['message'] = 'You cannot comment. Please login'
@@ -464,16 +467,10 @@ def tag(request, tag_name):
 
     tag = Tag.objects.get(name=tag_name)
     articles = tag.article_set.order_by('-pub_date')
-    if len(articles) > 0 and len(articles) % 2 == 1:
-        last_article = articles.last()
-        articles = articles.exclude(name=last_article.name)
-    else:
-        last_article = None
 
     context = {
         'tag': tag,
         'articles': articles,
-        'last_article': last_article
     }
 
     return render(request, template, context)

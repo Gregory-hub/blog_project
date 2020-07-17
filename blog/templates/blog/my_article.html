@@ -32,15 +32,20 @@
             <div class="header__inner">
 
                 <div class="header__logo">
-                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
 
                 <nav class="nav">
                     <a class="nav__link" href="{% url 'blog:index' %}">Main</a>
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
-                    <a class="nav__link--sign" href="{% url 'blog:my_page' %}">My page</a>
-                    <a class="nav__photo" href="">
+                    {% if request.user.is_authenticated %}
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">My page</a>
+                    {% else %}
+                        <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
+                        <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
+                    {% endif %}
+                    <a class="nav__photo" id="photobtn" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
@@ -57,9 +62,9 @@
                     </form>
                 </div>
             </div>
-            </div>
         </div>
     </header>
+
 
 <div class="intro">
     <div class="intro__inner">
@@ -70,8 +75,12 @@
             <div class="intro__title">{{ article.name }}</div>
             <div class="intro__subtitle">
                 <div class="intro__author">
-                    <span class="intro__s" >by </span><a class="intro__auth" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
-                    <span class="intro__s" > {% get_datetime article.pub_date %}</span>
+                    <span class="intro__s">by </span><a class="intro__auth" href="{% url 'blog:writer' article.author.name %}">{{ article.author.name }}</a>
+                    <span class="intro__s"> {% get_datetime article.pub_date %}
+                    {% if article.last_edit != article.pub_date %}
+                        (edited {% get_datetime article.last_edit %})
+                    {% endif %}
+                    </span>
                 </div>
             </div>
         </div>
@@ -99,6 +108,34 @@
     <a href="{% url 'blog:edit' article.name %}" class="nav__link--sign specbtn" id="shown">edit article</a>
 </div>
 
+{% if comments %}
+    <div class="reviews">
+        <div class="container">
+            <div class="review">
+                <div class="container2">
+                    <div class="comment__title">Comments</div>
+                    <div class="comments">
+
+                        {% for comment in comments %}
+                            <div class="comments__block">
+                                <div class="comments__up">
+                                    <img src="{{ comment.author.image.url }}" class="comments__photo">
+                                    <div class="comments__text">{{ comment.text }}</div>
+                                </div>
+                                <div class="comments__down">
+                                    <div class="comments__name">{{ comment.author }}</div>
+                                    <div class="comments__time">{% get_datetime comment.comment_date %}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</div>
+{% endif %}
+
 <footer class="footer">
     <div class="container">
         <div class="footer__footer">
@@ -124,7 +161,7 @@
     </div>
 </footer>
 
-
 <script src="{% static 'blog/js/my_article.js' %}"></script>
+
 </body>
 </html>

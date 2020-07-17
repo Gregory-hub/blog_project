@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
     <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% load static %}
     <link rel="stylesheet" href="{% static 'blog/tags.css' %}">
 </head>
@@ -30,29 +32,28 @@
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nv--li" href="{% url 'blog:tags' %}">Tags</a>
                     {% if request.user.is_authenticated %}
-                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">My page</a>
                     {% else %}
                         <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
                         <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                     {% endif %}
-                    <a class="nav__photo" href="">
+                    <a class="nav__photo" id="photobtn" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
                     </a>
-                    </a>
                 </nav>
-                <button class="burger" type="button" id="navToggle" >
-                    <span class="burger__item">Menu</span>
-                </button>
-            </div>
-            <div class="search__item" id="searitem">
-                <div class="search__line">
-                    <form action="{% url 'blog:search' %}" class="box" method="get">
-                        <input type="title" id="title" name="q" placeholder="Search">
-                    </form>
+                    <button class="burger" type="button" id="navToggle" >
+                        <span class="burger__item">Menu</span>
+                    </button>
                 </div>
-            </div>
+                <div class="search__item" id="searitem">
+                    <div class="search__line">
+                        <form action="{% url 'blog:search' %}" class="box" method="get">
+                            <input type="title" id="title" name="q" placeholder="Search">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -143,74 +144,38 @@
 
 <!-- tags -->
 
-<div class="text ts2" >
-   <div class="container">
-        <div class="text__text">
-        You might also like
-        </div>
-    </div>
-</div>
+{% if tags|length != 0 %}
 
-<div class="tag2 tag">
-    <div class="container">
-        <div class="tags2">
-
-            <div class="tags__item tsi1">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/company.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Education</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="tags__item tsi2">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/stairs.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Architecture</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="tags__item tsi3">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/breakfast.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Lifestyle</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="tags__item tsi4">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/forest.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Nature</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="tags__item tsi5">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/artgallery.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Culture</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="tags__item tsi6">
-                <a class="tag__link" href="tag.html">
-                   <img src="{% static 'blog/images/design.jpg' %}" alt="" class="item__img">
-                    <div class="tags__content">
-                        <div class="tags__title">Design</div>
-                    </div>
-                </a>
+    <div class="text ts2" >
+       <div class="container">
+            <div class="text__text">
+            You might also like
             </div>
         </div>
     </div>
-</div>
+
+    <div class="tag2 tag">
+        <div class="container">
+            <div class="tags2">
+
+                {% for tag in tags %}
+
+                    <div class="tags__item tsi1">
+                        <a class="tag__link" href="{% url 'blog:tag' tag.name %}">
+                           <img src="{{ tag.image.url }}" alt="" class="item__img">
+                            <div class="tags__content">
+                                <div class="tags__title">{{ tag.name }}</div>
+                            </div>
+                        </a>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+{% endif %}
 
 <footer class="footer">
     <div class="container">
@@ -237,7 +202,7 @@
     </div>
 </footer>
 
-
+<script src="{% static 'blog/js/tags.js' %}"></script>
 
 </body>
 </html>

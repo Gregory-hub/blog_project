@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Blog BN</title>
-    <meta name="google" content="notranslate">
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% load static %}
     {% load get_datetime %}
     <link rel="stylesheet" href="{% static 'blog/article.css' %}">
+    <script src="{% static 'blog/js/article.js' %}"></script>
 </head>
 <body>
 
@@ -30,7 +33,7 @@
             <div class="header__inner">
 
                 <div class="header__logo">
-                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
 
                 <nav class="nav">
@@ -38,12 +41,12 @@
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
                     {% if request.user.is_authenticated %}
-                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">Your page</a>
+                        <a class="nav__link--sign" href="{% url 'blog:my_page' %}">My page</a>
                     {% else %}
                         <a class="nav__link--sign" href="{% url 'blog:login' %}">Login</a>
                         <a class="nav__link--sign" href="{% url 'blog:sign_up' %}">Sign up</a>
                     {% endif %}
-                    <a class="nav__photo" href="">
+                    <a class="nav__photo" id="photobtn" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
@@ -60,9 +63,9 @@
                     </form>
                 </div>
             </div>
-            </div>
         </div>
     </header>
+
 
     <div class="intro">
         <div class="intro__inner">
@@ -137,22 +140,39 @@
         <div class="container">
             <div class="review">
                 <div class="container2">
-                    <form class="boxl" action="index.html" method="post">
+                    {% if comments %}
+                        <div class="comment__title">Comments</div>
+                        <div class="comments">
+
+                            {% for comment in comments %}
+                                <div class="comments__block">
+                                    <div class="comments__up">
+                                        <img src="{{ comment.author.image.url }}" class="comments__photo">
+                                        <div class="comments__text">{{ comment.text }}</div>
+                                    </div>
+                                    <div class="comments__down">
+                                        <div class="comments__name">{{ comment.author }}</div>
+                                        <div class="comments__time">{% get_datetime comment.comment_date %}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form class="boxl" action="{% url 'blog:article' article.author.name article.name %}" method="post">
+                        {% csrf_token %}
                         <div class="comment">
-                            <div class="comment__title">Comments</div>
                             <div class="comment__text">
-                                <textarea class="comment__texting" type="text" placeholder="Write your comment"></textarea>
+                                {{ form.text }}
                             </div>
-                            <div>
-                                <input type="submit" name="" value="Submit">
-                            </div>
+                            <input type="submit" name="comment_form" value="Submit">
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
-
 
     <footer class="footer">
         <div class="container">
@@ -178,5 +198,8 @@
             </div>
         </div>
     </footer>
+
+<script src="{% static 'blog/js/article.js' %}"></script>
+
 </body>
 </html>

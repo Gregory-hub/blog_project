@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Blog BN</title>
     <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% load static %}
     {% load get_datetime %}
@@ -23,7 +24,7 @@
             <div class="header__inner">
 
                 <div class="header__logo">
-                        <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
+                    <a class="header__logotype" href="{% url 'blog:index' %}">Blog BN</a>
                 </div>
 
                 <nav class="nav">
@@ -31,7 +32,7 @@
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
                     <a class="nav__link--sign" href="{% url 'blog:logout' %}">Logout</a>
-                    <a class="nav__photo" href="">
+                    <a class="nav__photo" id="photobtn" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
@@ -43,14 +44,14 @@
             </div>
             <div class="search__item" id="searitem">
                 <div class="search__line">
-                    <form action="{% url 'blog:search' %}" class="box" method="get">
+                    <form action="{% url 'blog:search' %}" class="boxal" method="get">
                         <input type="title" id="title" name="q" placeholder="Search">
                     </form>
                 </div>
             </div>
-            </div>
         </div>
     </header>
+
 
 <div class="fixword">
     <div class="fixword__text">
@@ -79,6 +80,7 @@
                     <iframe id="hf" name="hiddenframe" style="width:0px; height:0px; border:0px"></iframe>
                     <input id="ib" type="submit" name="image_form">
                 </form>
+                <button type="button" class="intro__btn3" id="backbtn2">Back</button>
             </div>
 
             <div class="intro__right">
@@ -95,6 +97,7 @@
                     {{ bio_form.bio }}
                     <input id="ibtn" type="submit" name="bio_form">
                 </form>
+                <button type="button" class="intro__btn3" id="backbtn">Back</button>
             </div>
         </div>
     </div>
@@ -139,7 +142,7 @@
             {% if articles|length > 0 %}
                 {% for article in articles %}
 
-                        <div class="blogs__item1 bi14">
+                        <div class="blogs__item1 bi1">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:my_article' article.name %}">
                                     {% if article.image %}
