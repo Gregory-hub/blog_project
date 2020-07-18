@@ -185,7 +185,7 @@ class WriterViewTests(TestCase):
 class MyPageViewTests(TestCase):
 
     def setUp(self):
-        self.tag = create_tag('No tag')
+        self.tag = create_tag('tag')
         self.user = create_user('test_writer', 'test_writer')
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
@@ -276,7 +276,7 @@ class MyPageViewTests(TestCase):
 class MyArticleViewTests(TestCase):
 
     def setUp(self):
-        self.tag = create_tag('No tag')
+        self.tag = create_tag('test_tag')
         self.user = create_user('test_writer', 'test_writer')
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
@@ -306,7 +306,7 @@ class MyArticleViewTests(TestCase):
         self.assertEqual(response.status_code, 401)
 
 
-#
+
 class EditViewTests(TestCase):
 
     def setUp(self):
@@ -341,7 +341,7 @@ class EditViewTests(TestCase):
     def test_post_edits_article_without_image(self):
         new_name = 'test_article_new'
         new_text = 'test_article_new text'
-        new_tag = create_tag('No tag')
+        new_tag = create_tag('tag')
 
         response = self.client.post(
             reverse('blog:edit', args=(self.article.name, )), {
@@ -361,7 +361,7 @@ class EditViewTests(TestCase):
     def test_post_edits_article_with_image(self):
         new_name = 'test_article_new'
         new_text = 'test_article_new text'
-        new_tag = create_tag('No tag')
+        new_tag = create_tag('tag')
         with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as image:
             new_image = SimpleUploadedFile('test1.jpg', image.read(), content_type='image/jpeg')
 

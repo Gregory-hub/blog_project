@@ -8,7 +8,7 @@ def get_choices():
     tags = Tag.objects.all()
     choices = []
     for tag in tags:
-        choices.append((tag, tag.name))
+        choices.append((tag.name, tag.name))
     return choices
 
 

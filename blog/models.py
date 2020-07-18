@@ -118,7 +118,7 @@ class Comment(Model):
 
 class Tag(Model):
     name = CharField(max_length=70)
-    image = ImageField(upload_to=r'media\tags\images', default=r'blog\static\blog\images\default.jpg', null=True)
+    image = ImageField(upload_to=r'media\tags\images', default=r'blog\static\blog\images\black.jpg', null=True)
 
 
     def __str__(self):
