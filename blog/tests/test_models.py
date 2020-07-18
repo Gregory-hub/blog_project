@@ -47,7 +47,7 @@ def create_user(username, password):
     user = User.objects.create_user(username=username, password=password)
     return user
 
-@unittest.skip('')
+
 class ArticleModelTestCase(TestCase):
 
     def setUp(self):
@@ -85,7 +85,7 @@ class ArticleModelTestCase(TestCase):
         self.assertIs(default_storage.listdir('media/articles/images')[1].count('test_writer_test_article.jpg'), 0)
         self.assertIs(self.article.image.name, None)
 
-@unittest.skip('')
+
 class WriterModelTestCase(TestCase):
 
     def setUp(self):

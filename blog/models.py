@@ -82,7 +82,7 @@ class Writer(Model):
     name = CharField(max_length=50)
     bio = CharField(max_length=1000, default='')
     age = IntegerField()
-    image = ImageField(upload_to=r'media\writers\images', default=r'media\writers\images\default.jpg', null=True)
+    image = ImageField(upload_to=r'media\writers\images', default=r'blog\static\blog\images\default.jpg', null=True)
 
 
     def __str__(self):
@@ -118,7 +118,7 @@ class Comment(Model):
 
 class Tag(Model):
     name = CharField(max_length=70)
-    image = ImageField(upload_to=r'media\tags\images', default=r'media\tags\images\black.jpg', null=True)
+    image = ImageField(upload_to=r'media\tags\images', default=r'blog\static\blog\images\default.jpg', null=True)
 
 
     def __str__(self):

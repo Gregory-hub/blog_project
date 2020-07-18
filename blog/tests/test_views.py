@@ -56,7 +56,7 @@ def create_user(username, password):
     return user
 
 
-@unittest.skip('done')
+
 class IndexViewTestCase(TestCase):
 
     def tearDown(self):
@@ -96,7 +96,7 @@ class IndexViewTestCase(TestCase):
         response = self.client.get(reverse('blog:index'))
         self.assertEqual(response.status_code, 200)
 
-@unittest.skip('done')
+
 class ArticleViewTestCase(TestCase):
 
     def setUp(self):
@@ -143,7 +143,7 @@ class ArticleViewTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Comment.objects.filter(article=self.article, text=text).exists())
 
-@unittest.skip('done')
+
 class WriterViewTests(TestCase):
 
     def setUp(self):
@@ -181,7 +181,7 @@ class WriterViewTests(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-@unittest.skip('done')
+
 class MyPageViewTests(TestCase):
 
     def setUp(self):
@@ -272,7 +272,7 @@ class MyPageViewTests(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertTrue(writer.image.path.startswith(settings.MEDIA_ROOT + r'\media\writers\images\test_writer'))
 
-@unittest.skip('done')
+
 class MyArticleViewTests(TestCase):
 
     def setUp(self):
@@ -306,7 +306,7 @@ class MyArticleViewTests(TestCase):
         self.assertEqual(response.status_code, 401)
 
 
-# @unittest.skip('done')
+#
 class EditViewTests(TestCase):
 
     def setUp(self):
@@ -382,7 +382,7 @@ class EditViewTests(TestCase):
         ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test_writer_test_article_new'))
 
 
-@unittest.skip('done')
+
 class DeleteViewTests(TestCase):
 
     def setUp(self):
@@ -417,7 +417,7 @@ class DeleteViewTests(TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertTrue(Article.objects.filter(author=self.writer, name=self.article.name).exists())
 
-@unittest.skip('done')
+
 class LogInViewTests(TestCase):
 
     def tearDown(self):
@@ -448,7 +448,7 @@ class LogInViewTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(user.is_authenticated)
 
-@unittest.skip('done')
+
 class SingUpViewTests(TestCase):
 
     def tearDown(self):
@@ -479,7 +479,7 @@ class SingUpViewTests(TestCase):
 
         self.assertEquals(response.status_code, 302)
 
-@unittest.skip('done')
+
 class LogOutViewTests(TestCase):
 
     def tearDown(self):
@@ -517,7 +517,7 @@ class LogOutViewTests(TestCase):
         self.assertEquals(response.status_code, 302)
 
 
-@unittest.skip('done')
+
 class AuthorsViewTestCase(TestCase):
 
     def tearDown(self):
@@ -541,7 +541,7 @@ class AuthorsViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-@unittest.skip('done')
+
 class TagsViewTestCase(TestCase):
 
     def tearDown(self):
@@ -565,7 +565,7 @@ class TagsViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-@unittest.skip('done')
+
 class TagViewTestCase(TestCase):
 
     def setUp(self):
@@ -584,8 +584,9 @@ class TagViewTestCase(TestCase):
             if name.startswith('test_writer'):
                 default_storage.delete('media/writers/images/' + name)
 
-        if 'test_tag.jpg' in default_storage.listdir('media/tags/images'):
-            default_storage.delete('media/tags/images/test_tag.jpg')
+        for name in default_storage.listdir('media/tags/images')[1]:
+            if name.startswith('test_tag'):
+                default_storage.delete('media/tags/images/' + name)
 
 
     def test_status_200_without_articles(self):
