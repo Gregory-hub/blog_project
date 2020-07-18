@@ -86,7 +86,11 @@
             <div class="auth__item1">
                 <a class="auth__link" href="{% url 'blog:writer' writer.name %}">
                     <div class="auth__photo">
-                        <img class="auth__img" src="{{ writer.image.url }}">
+                        {% if writer.image %}
+                            <img class="auth__img" src="{{ writer.image.url }}" alt="Here should be an image">
+                        {% else %}
+                            <img src="https://placehold.it/250x250" alt="Here should be an image" class="intro__img">
+                        {% endif %}
                     </div>
                     <div class="auth__content">
                         <div class="auth__name">{{ writer.name }}</div>

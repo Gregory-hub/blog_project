@@ -84,7 +84,7 @@
                         <a href="{% url 'blog:article' article.author.name article.name %}" class="search__obj">{{ article.name }}</a>
                     {% endfor %}
                 {% else %}
-                    <p>No matched articles</p>
+                    <p>No articles matched</p>
                 {% endif %}
             </div>
         </div>
@@ -97,7 +97,7 @@
                         <a href="{% url 'blog:tag' tag.name %}" class="search__obj">{{ tag.name }}</a>
                     {% endfor %}
                 {% else %}
-                    <p>No matched tags</p>
+                    <p>No tags matched</p>
                 {% endif %}
             </div>
         </div>
@@ -110,7 +110,7 @@
                         <a href="{% url 'blog:writer' writer.name %}" class="search__obj">{{ writer.name }}</a>
                     {% endfor %}
                 {% else %}
-                    <p>No matched writers</p>
+                    <p>No writers matched</p>
                 {% endif %}
             </div>
         </div>

@@ -81,7 +81,11 @@
 
                     <div class="tag__item2 ti21">
                         <a class="tag__link" href="{% url 'blog:tag' top_tags.0.name %}">
-                           <img src="{{ top_tags.0.image.url }}" alt="" class="item__img">
+                            {% if top_tags.0.image %}
+                                <img src="{{ top_tags.0.image.url }}" alt="Here should be an image" class="item__img">
+                            {% else %}
+                                <img src="https://placehold.it/250x250" alt="Here should be an image" class="item__img">
+                            {% endif %}
                             <div class="tag__content">
                                 <div class="tt1">{{ top_tags.0.name }}</div>
                             </div>

@@ -71,7 +71,11 @@
 
             <div class="intro__left">
                 <div class="intro__photo">
-                    <img src="{{ writer.image.url }}" class="intro__img">
+                    {% if writer.image %}
+                        <img src="{{ writer.image.url }}" class="intro__img" alt="Here should be an image">
+                    {% else %}
+                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="intro__img">
+                    {% endif %}
                 </div>
 
             </div>

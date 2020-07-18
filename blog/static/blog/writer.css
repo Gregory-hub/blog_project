@@ -173,7 +173,7 @@ h1,h2,h3,h4,h5,h6{
     margin-top: 10px;
 }
 
-.boxal input[type="title"]{
+.tx input[type="search"]{
     height: 30px;
     width: 200px;
     border-radius: 20px;
@@ -186,7 +186,7 @@ h1,h2,h3,h4,h5,h6{
     z-index: 2000;
 }
 
-.boxal input[type="title"]:focus{
+.tx input[type="search"]:focus{
     border-color: #000;
 }
 
@@ -472,7 +472,7 @@ h1,h2,h3,h4,h5,h6{
 
 
 .blogs__item1{
-    width: 65.5%;
+    width:100%;
 
     margin-top: 20px;
     z-index: 100;
@@ -773,6 +773,7 @@ h1,h2,h3,h4,h5,h6{
 
 .radio__text{
     margin-right: 20px;
+    width: 100px;
 }
 
 .boxl input[type = "submit"]{

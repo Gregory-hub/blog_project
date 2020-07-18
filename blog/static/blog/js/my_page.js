@@ -66,8 +66,7 @@ $(function () {
 });
 
 
-document.getElementById("photobtn").onclick = function(event){
+document.getElementById("photobtn1").onclick = function(event){
     event.preventDefault();
     document.getElementById("searitem").style.display = "block";
 }
-

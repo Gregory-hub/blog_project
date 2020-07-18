@@ -6,27 +6,38 @@ from django.db.models import *
 from django.conf import settings
 
 
-def resize_image(path):
+def resize_image(path, square=False):
     image = Image.open(path)
     image.thumbnail((1500, 1500))
+
+    if square:
+        width_to_cut = abs(image.width - image.height) // 2
+        if image.width > image.height:
+            upper, lower = 0, image.height
+            left, right = width_to_cut, image.width - width_to_cut
+        elif image.height > image.width:
+            left, right = 0, image.width
+            upper, lower = width_to_cut, image.height - width_to_cut
+        else:
+            left, upper, right, lower = 0, 0, image.width, image.height
+
+        image = image.crop((left, upper, right, lower))
     image.save(path)
 
     return Image.open(path)
 
 
-def upload(instanse, path, file):
-    # upload
+def upload(instanse, path, file, square=False):
     with open(path, 'wb+') as dest:
         for c in file.chunks():
             dest.write(c)
-    resize_image(path)
+    resize_image(path, square)
     instanse.image = path
     instanse.save()
     return path
 
 
 def delete(instanse):
-    print("delete")
     if instanse.image:
         path = instanse.image.path
         default_storage.delete(path)
@@ -87,11 +98,10 @@ class Writer(Model):
         filename = os.path.join(r'media\writers\images', name)
 
         # upload
-        return upload(self, filename, file)
+        return upload(self, filename, file, square=True)
 
 
     def delete_image(self):
-        print("delete_image")
         delete(self)
 
 
@@ -108,7 +118,7 @@ class Comment(Model):
 
 class Tag(Model):
     name = CharField(max_length=70)
-    image = ImageField(upload_to=r'media\tags\images', default=r'media\tags\images\Metallica_-_Metallica_cover.jpg', null=True)
+    image = ImageField(upload_to=r'media\tags\images', default=r'media\tags\images\black.jpg', null=True)
 
 
     def __str__(self):

@@ -110,7 +110,11 @@
             <div class="author__title">Read more by this author</div>
             <a class="author__link" href="{% url 'blog:writer' article.author %}">
                 <div class="author__left">
-                    <img class="author__photo" src="{{ article.author.image.url }}">
+                    {% if article.author.image %}
+                        <img class="author__photo" src="{{ article.author.image.url }}" alt="Here should be an image">
+                    {% else %}
+                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="author__photo">
+                    {% endif %}
                 </div>
                 <div class="author__right">
                     <div class="author__name">{{ article.author.name }}</div>

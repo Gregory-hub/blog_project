@@ -32,7 +32,7 @@
                     <a class="nav__link" href="{% url 'blog:authors' %}">Authors</a>
                     <a class="nav__link" href="{% url 'blog:tags' %}">Tags</a>
                     <a class="nav__link--sign" href="{% url 'blog:logout' %}">Logout</a>
-                    <a class="nav__photo" id="photobtn" href="">
+                    <a class="nav__photo" id="photobtn1" href="">
                         <svg class="nav__photosearch">
                             <use xlink:href="#search"> </use>
                         </svg>
@@ -44,8 +44,8 @@
             </div>
             <div class="search__item" id="searitem">
                 <div class="search__line">
-                    <form action="{% url 'blog:search' %}" class="boxal" method="get">
-                        <input type="title" id="title" name="q" placeholder="Search">
+                    <form action="{% url 'blog:search' %}" class="tx" method="get">
+                        <input type="search" id="search" name="q" placeholder="Search">
                     </form>
                 </div>
             </div>
@@ -66,9 +66,9 @@
 
                 <button class="intro__btn2" id="photobtn" type="button">
                     {% if writer.image %}
-                        <img src="{{ writer.image.url }}" alt="" class="intro__img">
+                        <img src="{{ writer.image.url }}" alt="Here should be an image" class="intro__img">
                     {% else %}
-                        <img src="https://placehold.it/250x250" alt="" class="intro__img">
+                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="intro__img">
                     {% endif %}
                 </button>
 

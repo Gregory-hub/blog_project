@@ -26,16 +26,16 @@ def get_groups(article_set):
     Returned list format: [[mode, articles], [mode, articles], ...]
     mode is mode to display articles in browser
     """
-    # get latest articles(max: 40)
-    # order articles by num of comments
+
     if len(article_set) == 0:
         return []
-    if len(article_set) > 30:
+    elif len(article_set) == 1:
+        return [[0, list(article_set)]]
+    elif len(article_set) > 30:
         articles = article_set.order_by('-pub_date')[random.randint(10, 30)]
         articles.annotate(num_comments=Count('comment')).order_by('-num_comments')
     else:
         articles = article_set.annotate(num_comments=Count('comment')).order_by('-num_comments')
-
 
     # group articles
     groups = []
@@ -100,6 +100,7 @@ def index(request):
         groups = get_groups(articles)
     elif len(articles) == 1:
         article1, articles = articles[0], []
+        groups = []
     else:
         article1 = None
         groups = []
@@ -327,6 +328,10 @@ def edit(request, article_name):
 
             if 'image' in request.FILES:
                 article.upload_image(request.FILES['image'])
+            else:
+                name = article.author.name + '_' + article.name + os.path.splitext(os.path.basename(article.image.name))[1]
+                filename = os.path.join(r'media\articles\images', name)
+                article.image = filename
 
             article.last_edit=timezone.now()
 
