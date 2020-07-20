@@ -88,8 +88,11 @@
                 {{ form.text }}
                 <div class="tags" id="tags">
                     <p>
-                        {% for t in form.tag %}
-                            {{ t }}
+                        {% for tag in tags %}
+                            <label for="id_tag{{ forloop.counter0 }}">
+                                <input type="radio" name="tag" value="{{ tag.name }}" id="id_tag_{{ forloop.counter0 }}" required>
+                                {{ tag.name }}
+                            </label>
                         {% endfor %}
                     </p>
                 </div>

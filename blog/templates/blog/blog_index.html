@@ -123,7 +123,11 @@
                         <div class="blogs__item1 bi11">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
+                                    {% if group.1.0.image %}
+                                        <img src="{{ group.1.0.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}
                                     <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }}</h2></a>
                                         <div class="blogs__auth">
@@ -148,8 +152,11 @@
                         <div class="blogs__item1 bi11">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.0.image %}
+                                        <img src="{{ group.1.0.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -168,8 +175,11 @@
                         <div class="blogs__item2 bi21">
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.1.image %}
+                                        <img src="{{ group.1.1.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -191,8 +201,11 @@
                             <!-- bi22 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.0.image %}
+                                        <img src="{{ group.1.0.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -210,8 +223,11 @@
                             <!-- bi15 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.1.image %}
+                                        <img src="{{ group.1.1.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -233,8 +249,11 @@
                             <!-- bi41 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.0.image %}
+                                        <img src="{{ group.1.0.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -252,8 +271,11 @@
                             <!-- bi42 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.1.image %}
+                                        <img src="{{ group.1.1.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -275,8 +297,11 @@
                             <!-- bi12 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}">
-                                    <img src="{{ group.1.0.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.0.image %}
+                                        <img src="{{ group.1.0.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.0.author.name group.1.0.name %}"><h2 class="blogs__text">{{ group.1.0.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -294,8 +319,11 @@
                             <!-- bi13 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}">
-                                    <img src="{{ group.1.1.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.1.image %}
+                                        <img src="{{ group.1.1.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.1.author.name group.1.1.name %}"><h2 class="blogs__text">{{ group.1.1.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>
@@ -313,8 +341,11 @@
                             <!-- bi14 -->
                             <article>
                                 <a class="blogs__fon"  href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}">
-                                    <img src="{{ group.1.2.image.url }}" class="blogs__img">
-                                    <div class="blogs__content">
+                                    {% if group.1.2.image %}
+                                        <img src="{{ group.1.2.image.url }}" class="blogs__img" alt="Here should be an image">
+                                    {% else %}
+                                        <img src="https://placehold.it/250x250" alt="Here should be an image" class="blogs__img">
+                                    {% endif %}                                    <div class="blogs__content">
                                         <a class="blogs__texting" href="{% url 'blog:article' group.1.2.author.name group.1.2.name %}"><h2 class="blogs__text">{{ group.1.2.name }}</h2></a>
                                         <div class="blogs__auth">
                                             <span class="blogs__s">by </span>

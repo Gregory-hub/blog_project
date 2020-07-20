@@ -54,35 +54,35 @@ class ArticleModelTestCase(TestCase):
         self.user = create_user('test_writer', 'test_writer')
         self.writer = create_writer('test_writer', 0)
         self.tag = create_tag('test_tag')
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test2.jpg', 'rb') as file:
+        with open(settings.MEDIA_ROOT + r'\test\images\test2.jpg', 'rb') as file:
             image = SimpleUploadedFile('test_writer_test_article.jpg', file.read(), content_type='image/jpg')
         self.article = create_article(self.writer, 'test_article', 'test_article text', image, self.tag)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_upload_image(self):
         for i in range(3):
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test' + str(i) + '.jpg', 'rb') as file:
+            with open(settings.MEDIA_ROOT + r'\test\images\test' + str(i) + '.jpg', 'rb') as file:
                 image = SimpleUploadedFile('test' + str(i) + '.jpg', file.read(), content_type='image/jpg')
             self.article.upload_image(image)
-            image = Image.open('media/articles/images/test_writer_test_article.jpg')
+            image = Image.open(os.path.join(settings.MEDIA_ROOT, 'articles/images/test_writer_test_article.jpg'))
             self.assertTrue(image.width <= 1500 and image.height <= 1500)
-            self.assertIs(default_storage.listdir('media/articles/images')[1].count('test_writer_test_article.jpg'), 1)
+            self.assertIs(default_storage.listdir('articles/images')[1].count('test_writer_test_article.jpg'), 1)
 
 
     def test_delete_image(self):
-        self.assertIs(default_storage.listdir('media/articles/images')[1].count('test_writer_test_article.jpg'), 1)
+        self.assertIs(default_storage.listdir('articles/images')[1].count('test_writer_test_article.jpg'), 1)
         self.article.delete_image()
-        self.assertIs(default_storage.listdir('media/articles/images')[1].count('test_writer_test_article.jpg'), 0)
+        self.assertIs(default_storage.listdir('articles/images')[1].count('test_writer_test_article.jpg'), 0)
         self.assertIs(self.article.image.name, None)
 
 
@@ -90,34 +90,32 @@ class WriterModelTestCase(TestCase):
 
     def setUp(self):
         self.user = create_user('test_writer', 'test_writer')
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as file:
-            image = SimpleUploadedFile('test_writer.jpg', file.read(), content_type='image/jpg')
-        self.writer = create_writer('test_writer', 0, image)
+        self.writer = create_writer('test_writer', 0)
+        with open(settings.MEDIA_ROOT + r'\test\images\test1.jpg', 'rb') as file:
+            image = SimpleUploadedFile('test_writer_image.jpg', file.read(), content_type='image/jpg')
+        self.writer.upload_image(image)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
-            if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_upload_image(self):
         for i in range(3):
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test' + str(i) + '.jpg', 'rb') as file:
+            with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test' + str(i) + '.jpg'), 'rb') as file:
                 image = SimpleUploadedFile('test' + str(i) + '.jpg', file.read(), content_type='image/jpg')
             self.writer.upload_image(image)
-            image = Image.open('media/writers/images/test_writer.jpg')
+            image = Image.open(os.path.join(settings.MEDIA_ROOT, r'writers\images\test_writer_image.jpg'))
             self.assertTrue(image.width <= 1500 and image.height <= 1500)
             self.assertTrue(abs(image.width - image.height) <= 1)
-            self.assertIs(default_storage.listdir('media/writers/images')[1].count('test_writer.jpg'), 1)
+            self.assertIs(default_storage.listdir('writers/images')[1].count('test_writer_image.jpg'), 1)
 
 
     def test_delete_image(self):
-        self.assertIs(default_storage.listdir('media/writers/images')[1].count('test_writer.jpg'), 1)
+        self.assertIs(default_storage.listdir('writers/images')[1].count('test_writer_image.jpg'), 1)
         self.writer.delete_image()
-        self.assertIs(default_storage.listdir('media/writers/images')[1].count('test_writer.jpg'), 0)
+        self.assertIs(default_storage.listdir('writers/images')[1].count('test_writer_image.jpg'), 0)
         self.assertIs(self.writer.image.name, None)

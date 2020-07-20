@@ -56,17 +56,16 @@ def create_user(username, password):
     return user
 
 
-
 class IndexViewTestCase(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_status_200_with_0_articles(self):
@@ -77,7 +76,7 @@ class IndexViewTestCase(TestCase):
         writer = create_writer('test_writer', 0)
         tag = create_tag('test_tag')
         article = create_article(writer, 'test_article', 'test_article text', tag=tag)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
         article.upload_image(image)
 
@@ -89,7 +88,7 @@ class IndexViewTestCase(TestCase):
         tag = create_tag('test_tag')
         for i in range(2):
             article = create_article(writer, 'test_article' + str(i), 'test_article text', tag=tag)
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test' + str(i) + '.jpg', 'rb') as file:
+            with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test' + str(i) + '.jpg'), 'rb') as file:
                 image = SimpleUploadedFile('test' + str(i) + '.jpg', file.read(), content_type='image/jpg')
             article.upload_image(image)
 
@@ -104,19 +103,19 @@ class ArticleViewTestCase(TestCase):
         self.writer = create_writer('test_writer', 0)
         self.tag = create_tag('test_tag')
         self.article = create_article(self.writer, 'test_article', 'test_article text', tag=self.tag)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
         self.article.upload_image(image)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_status_200(self):
@@ -152,13 +151,13 @@ class WriterViewTests(TestCase):
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_status_200_without_articles(self):
@@ -173,7 +172,7 @@ class WriterViewTests(TestCase):
     def test_status_200_with_articles(self):
         for i in range(3):
             article = create_article(self.writer, 'test_article' + str(i), 'test_article text', tag=self.tag)
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+            with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
                 image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
             article.upload_image(image)
 
@@ -181,24 +180,23 @@ class WriterViewTests(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-
 class MyPageViewTests(TestCase):
 
     def setUp(self):
-        self.tag = create_tag('tag')
+        self.tag = create_tag('No tag')
         self.user = create_user('test_writer', 'test_writer')
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_status_200_without_articles(self):
@@ -208,7 +206,7 @@ class MyPageViewTests(TestCase):
     def test_status_200_with_articles(self):
         for i in range(3):
             article = create_article(self.writer, 'test_article' + str(i), 'test_article text', tag=self.tag)
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+            with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
                 image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
             article.upload_image(image)
 
@@ -225,7 +223,7 @@ class MyPageViewTests(TestCase):
         text = 'test_article text'
         tag = self.tag
 
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as image:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test1.jpg'), 'rb') as image:
             image = SimpleUploadedFile('test1.jpg', image.read(), content_type='image/jpeg')
             response = self.client.post(reverse('blog:my_page'), {
                 'add_form': ['Save'],
@@ -241,7 +239,7 @@ class MyPageViewTests(TestCase):
             name = name,
             text = text,
             tag = tag,
-        ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test_writer_test_article'))
+        ).image.path.startswith(os.path.join(settings.MEDIA_ROOT, r'articles\images\test_writer_test_article')))
 
     def test_post_bio_form(self):
         bio = 'bio'
@@ -260,7 +258,7 @@ class MyPageViewTests(TestCase):
         self.assertEqual(writer.bio, bio)
 
     def test_post_image_form(self):
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test2.jpg', 'rb') as image:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test2.jpg'), 'rb') as image:
             image = SimpleUploadedFile('test2.jpg', image.read(), content_type='image/jpeg')
 
         response = self.client.post(reverse('blog:my_page'), {
@@ -270,30 +268,30 @@ class MyPageViewTests(TestCase):
 
         writer = Writer.objects.get(name=self.writer.name)
         self.assertEquals(response.status_code, 302)
-        self.assertTrue(writer.image.path.startswith(settings.MEDIA_ROOT + r'\media\writers\images\test_writer'))
+        self.assertTrue(writer.image.path.startswith(os.path.join(settings.MEDIA_ROOT, r'writers\images\test_writer')))
 
 
 class MyArticleViewTests(TestCase):
 
     def setUp(self):
-        self.tag = create_tag('test_tag')
+        self.tag = create_tag('No tag')
         self.user = create_user('test_writer', 'test_writer')
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
         self.article = create_article(self.writer, 'test_article', 'test_article text', tag=self.tag)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
         self.article.upload_image(image)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_status_200(self):
@@ -306,7 +304,6 @@ class MyArticleViewTests(TestCase):
         self.assertEqual(response.status_code, 401)
 
 
-
 class EditViewTests(TestCase):
 
     def setUp(self):
@@ -315,18 +312,18 @@ class EditViewTests(TestCase):
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
         self.article = create_article(self.writer, 'test_article', 'test_article text', tag=self.tag)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test2.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
         self.article.upload_image(image)
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_response_200(self):
@@ -341,7 +338,7 @@ class EditViewTests(TestCase):
     def test_post_edits_article_without_image(self):
         new_name = 'test_article_new'
         new_text = 'test_article_new text'
-        new_tag = create_tag('tag')
+        new_tag = create_tag('No tag')
 
         response = self.client.post(
             reverse('blog:edit', args=(self.article.name, )), {
@@ -356,13 +353,13 @@ class EditViewTests(TestCase):
             name = new_name,
             text = new_text,
             tag = new_tag,
-        ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test_writer_test_article_new'))
+        ).image.path.startswith(os.path.join(settings.MEDIA_ROOT, r'articles\images\test_writer_test_article_new')))
 
     def test_post_edits_article_with_image(self):
         new_name = 'test_article_new'
         new_text = 'test_article_new text'
-        new_tag = create_tag('tag')
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test1.jpg', 'rb') as image:
+        new_tag = create_tag('No tag')
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test1.jpg'), 'rb') as image:
             new_image = SimpleUploadedFile('test1.jpg', image.read(), content_type='image/jpeg')
 
         response = self.client.post(
@@ -379,8 +376,7 @@ class EditViewTests(TestCase):
             name = new_name,
             text = new_text,
             tag = new_tag,
-        ).image.path.startswith(settings.MEDIA_ROOT + r'\media\articles\images\test_writer_test_article_new'))
-
+        ).image.path.startswith(os.path.join(settings.MEDIA_ROOT, r'articles\images\test_writer_test_article_new')))
 
 
 class DeleteViewTests(TestCase):
@@ -391,19 +387,19 @@ class DeleteViewTests(TestCase):
         self.writer = create_writer('test_writer', 0)
         self.client.login(username='test_writer', password='test_writer')
         self.article = create_article(self.writer, 'test_article', 'test_article text', tag=self.tag)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test0.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
         self.article.upload_image(image)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_deletes_article(self):
@@ -421,13 +417,13 @@ class DeleteViewTests(TestCase):
 class LogInViewTests(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_response_200(self):
@@ -452,13 +448,13 @@ class LogInViewTests(TestCase):
 class SingUpViewTests(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_get_response_200(self):
@@ -483,13 +479,13 @@ class SingUpViewTests(TestCase):
 class LogOutViewTests(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_if_logout_post_logs_user_out(self):
@@ -517,17 +513,16 @@ class LogOutViewTests(TestCase):
         self.assertEquals(response.status_code, 302)
 
 
-
 class AuthorsViewTestCase(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_status_200(self):
@@ -541,17 +536,16 @@ class AuthorsViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-
 class TagsViewTestCase(TestCase):
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
 
     def test_status_200(self):
@@ -565,28 +559,27 @@ class TagsViewTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-
 class TagViewTestCase(TestCase):
 
     def setUp(self):
         self.writer = create_writer('test_writer', 0)
-        with open(settings.MEDIA_ROOT + r'\media\test\images\test0.jpg', 'rb') as file:
+        with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test2.jpg'), 'rb') as file:
             image = SimpleUploadedFile('test_tag.jpg', file.read(), content_type='image/jpg')
         self.tag = create_tag('test_tag', image)
 
 
     def tearDown(self):
-        for name in default_storage.listdir('media/articles/images')[1]:
+        for name in default_storage.listdir('articles/images')[1]:
             if name.startswith('test_writer_test_article'):
-                default_storage.delete('media/articles/images/' + name)
+                default_storage.delete('articles/images/' + name)
 
-        for name in default_storage.listdir('media/writers/images')[1]:
+        for name in default_storage.listdir('writers/images')[1]:
             if name.startswith('test_writer'):
-                default_storage.delete('media/writers/images/' + name)
+                default_storage.delete('writers/images/' + name)
 
-        for name in default_storage.listdir('media/tags/images')[1]:
+        for name in default_storage.listdir('tags/images')[1]:
             if name.startswith('test_tag'):
-                default_storage.delete('media/tags/images/' + name)
+                default_storage.delete('tags/images/' + name)
 
 
     def test_status_200_without_articles(self):
@@ -602,7 +595,7 @@ class TagViewTestCase(TestCase):
         for i in range(1, 20):
             name = 'test_article' + str(i)
             article = create_article(self.writer, name, 'test_article text', tag=self.tag)
-            with open(settings.MEDIA_ROOT + r'\media\test\images\test' + str(i % 3) + '.jpg', 'rb') as file:
+            with open(os.path.join(settings.MEDIA_ROOT, r'test\images\test' + str(i % 3) + '.jpg'), 'rb') as file:
                 image = SimpleUploadedFile('test0.jpg', file.read(), content_type='image/jpg')
             article.upload_image(image)
 
