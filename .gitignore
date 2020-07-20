@@ -5,9 +5,9 @@ __pycache__/
 
 # virtualenv
 venv/
-#media/
-#!**/media/test/
-#!**/media/test/images/
+media/
+!**/media/test/
+!**/media/test/images/
 
 # django migrations
 **/migrations/**

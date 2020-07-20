@@ -14,6 +14,7 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage
 from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Count
 
 from .models import *
@@ -201,6 +202,7 @@ def my_page(request):
     bio_form = WriterBioForm(initial={'age': writer.age, 'bio': writer.bio})
 
     context = {
+        'tags': Tag.objects.all(),
         'message': message,
         'writer': writer,
         'articles': articles,
@@ -216,11 +218,21 @@ def my_page(request):
 
         if 'bio_form' in request.POST:
 
-            # writer bio form
-
-            bio_form = WriterBioForm(request.POST, instance=writer)
+            bio_form = WriterBioForm(request.POST)
             if bio_form.is_valid:
-                bio_form.save()
+
+                age = request.POST['age']
+                bio = request.POST['bio']
+
+                if age == '':
+                    age = None
+                if bio == '':
+                    bio = None
+
+                writer.age = age
+                writer.bio = bio
+                writer.save()
+
                 return HttpResponseRedirect(reverse('blog:my_page'))
             else:
                 context['message'] = 'Form is invalid'
@@ -232,10 +244,30 @@ def my_page(request):
 
             add_form = AddForm(request.POST, request.FILES)
             if add_form.is_valid():
-                tag_name = add_form.cleaned_data['tag']
+                tag_name = request.POST['tag']
 
-                name = add_form.cleaned_data['name']
                 text = add_form.cleaned_data['text']
+                name = add_form.cleaned_data['name']
+                spec_chars = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']
+                for char in spec_chars:
+                    if char in name:
+                        context['message'] = 'Name cannot contain special characters: '
+                        for i in range(len(spec_chars)):
+                            context['message'] += str(spec_chars[i])
+                        add_form = AddForm(initial={'text': text})
+                        context['add_form'] = add_form
+                        return render(request, template, context)
+
+                if len(name) >= 100:
+                    context['message'] = 'Name is too long'
+                    context['add_form'] = AddForm(initial={'name': name, 'text': text})
+                    return render(request, template, context)
+                if len(text) >= 100000:
+                    context['message'] = 'Text is too long'
+                    context['add_form'] = AddForm(initial={'name': name, 'text': text})
+                    return render(request, template, context)
+
+
                 tag = get_object_or_404(Tag, name=tag_name)
                 writer = Writer.objects.get(name=request.user.username)
 
@@ -305,6 +337,7 @@ def edit(request, article_name):
     })
 
     context = {
+        'tags': Tag.objects.all(),
         'article': article,
         'message': '',
         'form': form,
@@ -316,26 +349,55 @@ def edit(request, article_name):
     elif request.method == 'POST':
         form = EditForm(request.POST, request.FILES)
         if form.is_valid():
-            tag_name = form.cleaned_data['tag']
+            tag_name = request.POST['tag']
+            text = form.cleaned_data['text']
 
             name = form.cleaned_data['name']
-            text = form.cleaned_data['text']
+            spec_chars = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']
+            for char in spec_chars:
+                if char in name:
+                    context['message'] = 'Name cannot contain special characters: '
+                    for i in range(len(spec_chars)):
+                        context['message'] += str(spec_chars[i])
+                    form = EditForm(initial={'text': text})
+                    context['form'] = form
+                    return render(request, template, context)
+
+            if len(name) >= 100:
+                context['message'] = 'Name is too long'
+                context['form'] = EditForm(initial={'name': name, 'text': text})
+                return render(request, template, context)
+            if len(text) >= 100000:
+                context['message'] = 'Text is too long'
+                context['form'] = EditForm(initial={'name': name, 'text': text})
+                return render(request, template, context)
+
             tag = get_object_or_404(Tag, name=tag_name)
 
+            old_name = article.name
             article.name = name
             article.text = text
             article.tag = tag
-
-            if 'image' in request.FILES:
-                article.upload_image(request.FILES['image'])
-            else:
-                name = article.author.name + '_' + article.name + os.path.splitext(os.path.basename(article.image.name))[1]
-                filename = os.path.join(r'media\articles\images', name)
-                article.image = filename
-
             article.last_edit=timezone.now()
 
+            if name != old_name and not 'image' in request.FILES:
+                if article.image:
+                    old = article.image.path
+                else:
+                    old = None
+
+                dirname = os.path.join(settings.MEDIA_ROOT, 'articles/images')
+                new = os.path.join(dirname, article.author.name + '_' + article.name + os.path.splitext(article.image.path)[1])
+
+                os.rename(old, new)
+                article.image = new
+
             article.save()
+
+            if 'image' in request.FILES:
+                image = request.FILES['image']
+                article.upload_image(image)
+
             return HttpResponseRedirect(reverse('blog:my_article', args=(article.name, )))
         else:
             context['message'] = 'Form is invalid'

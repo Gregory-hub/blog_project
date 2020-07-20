@@ -85,9 +85,17 @@
 
             <div class="intro__right">
                 <div class="intro__name">{{ writer.name }}</div>
-                <div class="intro__age" id="age">Age: {{ writer.age }}</div>
+                {% if writer.age %}
+                    <div class="intro__age" id="age">Age: {{ writer.age }}</div>
+                {% else %}
+                    <div class="intro__age" id="age">Age: ___</div>
+                {% endif %}
                 <button type="button" class="intro__btn" id="btn">
-                    {{ writer.bio }}<span class="copy__text">(edit)</span>
+                    {% if writer.bio %}
+                        {{ writer.bio }}<span class="copy__text">(edit)</span>
+                    {% else %}
+                        Bio is empty<span class="copy__text">(edit)</span>
+                    {% endif %}
                 </button>
 
                 <!-- bio -->
@@ -123,8 +131,11 @@
                 {{ add_form.text }}
                 <div class="tags" id="tags">
                     <p>
-                        {% for t in add_form.tag %}
-                            {{ t }}
+                        {% for tag in tags %}
+                            <label for="id_tag{{ forloop.counter0 }}">
+                                <input type="radio" name="tag" value="{{ tag.name }}" id="id_tag_{{ forloop.counter0 }}" required>
+                                {{ tag.name }}
+                            </label>
                         {% endfor %}
                     </p>
                 </div>

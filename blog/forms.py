@@ -4,18 +4,9 @@ from django.contrib.auth.models import User
 from .models import *
 
 
-def get_choices():
-    tags = Tag.objects.all()
-    choices = []
-    for tag in tags:
-        choices.append((tag, tag.name))
-    return choices
-
-
 class AddForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'type': 'title', 'id': 'title', 'placeholder': 'Title', 'autocomplete': 'off'}), max_length=70)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'art', 'class': 'textareacl', 'placeholder': 'Text' ,'autocomplete': 'off'}))
-    tag = forms.ChoiceField(widget=forms.RadioSelect(), choices=get_choices())
     image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'avatarfile'}))
 
 
@@ -23,15 +14,9 @@ class WriterImageForm(forms.Form):
     image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'af', 'name': 'avatarfile'}))
 
 
-class WriterBioForm(forms.ModelForm):
-
-    class Meta:
-        model = Writer
-        fields = ('bio', 'age')
-        widgets = {
-            'bio': forms.Textarea(attrs={'id': 'itext', 'class': 'textareacl', 'name': 'info', 'placeholder': 'Information about you'}),
-            'age': forms.TextInput(attrs={'id': "iage", 'placeholder': "Your age"})
-        }
+class WriterBioForm(forms.Form):
+    bio = forms.CharField(widget=forms.Textarea(attrs={'id': 'itext', 'class': 'textareacl', 'name': 'info', 'placeholder': 'Information about you'}), required=False, max_length=1000)
+    age = forms.IntegerField(widget=forms.TextInput(attrs={'id': "iage", 'placeholder': "Your age"}), required=False)
 
 
 class SignUpForm(forms.Form):
@@ -47,7 +32,6 @@ class LogInForm(forms.Form):
 class EditForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'type': 'title', 'id': 'title', 'placeholder': 'Title', 'autocomplete': 'off'}), max_length=70)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'art', 'class': 'textareacl', 'placeholder': 'Text' ,'autocomplete': 'off'}))
-    tag = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'radio_text'}), choices=get_choices())
     image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'id': 'avatarfile', 'name': 'avatarfile'}), required=False)
 
 

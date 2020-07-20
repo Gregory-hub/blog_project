@@ -4,6 +4,7 @@ from PIL import Image
 from django.core.files.storage import default_storage
 from django.db.models import *
 from django.conf import settings
+from django.core.exceptions import SuspiciousFileOperation
 
 
 def resize_image(path, square=False):
@@ -28,21 +29,25 @@ def resize_image(path, square=False):
 
 
 def upload(instanse, path, file, square=False):
-    if not os.path.exists(os.path.dirname(filename)):
-        os.mkdir(os.path.dirname(filename))
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
     with open(path, 'wb+') as dest:
         for c in file.chunks():
             dest.write(c)
     resize_image(path, square)
     instanse.image = path
+
     instanse.save()
     return path
 
 
 def delete(instanse):
     if instanse.image:
-        path = instanse.image.path
-        default_storage.delete(path)
+        try:
+            path = instanse.image.path
+            default_storage.delete(path)
+        except SuspiciousFileOperation:
+            path = None
         instanse.image = None
         instanse.save()
     else:
@@ -54,7 +59,7 @@ class Article(Model):
     author = ForeignKey('Writer', on_delete=CASCADE)
     name = CharField(max_length=70)
     text = CharField(max_length=100000)
-    image = ImageField(upload_to=os.path.join(settings.MEDIA_ROOT, r'articles\images'), null=True)
+    image = ImageField(max_length=1000, upload_to=os.path.join(settings.MEDIA_ROOT, r'articles\images'), null=True)
     tag = ForeignKey('Tag', on_delete=CASCADE, null=True)
     pub_date = DateTimeField()
     last_edit = DateTimeField()
@@ -70,7 +75,7 @@ class Article(Model):
 
         # get filename
         name = self.author.name + '_' + self.name + os.path.splitext(os.path.basename(file.name))[1]
-        filename = os.path.join(os.path.join(settings.MEDIA_ROOT, r'\articles\images'), name)
+        filename = os.path.join(os.path.join(settings.MEDIA_ROOT, r'articles\images'), name)
 
         # upload
         return upload(self, filename, file)
@@ -82,9 +87,9 @@ class Article(Model):
 
 class Writer(Model):
     name = CharField(max_length=50)
-    bio = CharField(max_length=1000, default='')
-    age = IntegerField()
-    image = ImageField(upload_to=os.path.join(settings.MEDIA_ROOT, r'writers\images'), default=os.path.join(settings.MEDIA_ROOT, r'writers\images\default.jpg'), null=True)
+    bio = CharField(max_length=1000, null=True)
+    age = IntegerField(null=True)
+    image = ImageField(max_length=1000, upload_to=os.path.join(settings.MEDIA_ROOT, r'writers\images'), default=r'writers\images\default.jpg', null=True)
 
 
     def __str__(self):
@@ -120,7 +125,7 @@ class Comment(Model):
 
 class Tag(Model):
     name = CharField(max_length=70)
-    image = ImageField(upload_to=os.path.join(settings.MEDIA_ROOT, r'tags\images'), default=(settings.MEDIA_ROOT, r'tags\images\black.jpg'), null=True)
+    image = ImageField(max_length=1000, upload_to=os.path.join(settings.MEDIA_ROOT, r'tags\images'), default=r'tags\images\black.jpg', null=True)
 
 
     def __str__(self):
