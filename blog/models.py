@@ -46,7 +46,7 @@ def delete(instanse):
     if instanse.image:
         try:
             path = instanse.image.path
-            if path != os.path.join(settings.MEDIA_ROOT, r'writers\images\default.jpg') and path != os.path.join(settings.MEDIA_ROOT, r'tags\images\black.jpg'):
+            if path != os.path.join(settings.MEDIA_ROOT, r'writers\images\default.jpg') and path != os.path.join(settings.MEDIA_ROOT, r'tags/images/black.jpg'):
                 default_storage.delete(path)
         except SuspiciousFileOperation:
             path = None
@@ -61,7 +61,7 @@ class Article(Model):
     author = ForeignKey('Writer', on_delete=CASCADE)
     name = CharField(max_length=70)
     text = CharField(max_length=100000)
-    image = ImageField(max_length=1000, upload_to=r'articles\images', null=True)
+    image = ImageField(max_length=1000, upload_to=r'articles/images', null=True)
     tag = ForeignKey('Tag', on_delete=CASCADE, null=True)
     pub_date = DateTimeField()
     last_edit = DateTimeField()
@@ -77,7 +77,7 @@ class Article(Model):
 
         # get filename
         name = self.author.name + '_' + self.name + os.path.splitext(os.path.basename(file.name))[1]
-        filename = os.path.join(r'articles\images', name)
+        filename = os.path.join(r'articles/images', name)
 
         # upload
         return upload(self, filename, file)
@@ -91,7 +91,7 @@ class Writer(Model):
     name = CharField(max_length=50)
     bio = CharField(max_length=1000, null=True)
     age = IntegerField(null=True)
-    image = ImageField(max_length=1000, upload_to=r'writers\images', default=r'writers\images\default.jpg', null=True)
+    image = ImageField(max_length=1000, upload_to=r'writers/images', default=r'writers/images/default.jpg', null=True)
 
 
     def __str__(self):
@@ -104,7 +104,7 @@ class Writer(Model):
 
         # get filename
         name = self.name + '_image' + os.path.splitext(os.path.basename(file.name))[1]
-        filename = os.path.join(r'writers\images', name)
+        filename = os.path.join(r'writers/images', name)
 
         # upload
         return upload(self, filename, file, square=True)
@@ -127,7 +127,7 @@ class Comment(Model):
 
 class Tag(Model):
     name = CharField(max_length=70)
-    image = ImageField(max_length=1000, upload_to=r'tags\images', default=r'tags\images\black.jpg', null=True)
+    image = ImageField(max_length=1000, upload_to=r'tags/images', default=r'tags/images/black.jpg', null=True)
 
 
     def __str__(self):
