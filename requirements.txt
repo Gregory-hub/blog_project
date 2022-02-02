@@ -1,6 +1,6 @@
 asgiref==3.2.10
 attrs==19.3.0
-Django==3.1.6
+Django==3.1.14
 fuzzysearch==0.7.3
 Pillow==9.0.0
 psycopg2-binary==2.8.5
