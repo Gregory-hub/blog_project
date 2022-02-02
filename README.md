@@ -8,4 +8,3 @@
 6. run command: python manage.py migrate
 7. run command: python manage.py runserver
 8. paste into your browser: localhost:8000
-9. enjoy
